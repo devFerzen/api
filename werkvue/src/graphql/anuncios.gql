@@ -1,0 +1,7 @@
+query anuncios {
+  anuncios{
+    _id
+    titulo
+    descripcion
+  }
+}
