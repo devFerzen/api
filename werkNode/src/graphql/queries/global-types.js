@@ -47,6 +47,7 @@ const globalTypes = gql `
 
   type _werker {
     id: String
+    empresa_id: String
     nombre: _nombre
     factura: Boolean
     ubicacion: _ubicacion
@@ -55,6 +56,7 @@ const globalTypes = gql `
 
   input input_werker {
     id: String
+    empresa_id: String
     nombre: input_nombre
     factura: Boolean
     ubicacion: input_ubicacion
@@ -239,12 +241,16 @@ const globalTypes = gql `
     nombre: String
     descripcion: String
     anos_activos: String
+    telefono: String
+    direccion: String
   }
 
   input input_negocio {
     nombre: String
     descripcion: String
     anos_activos: String
+    telefono: String
+    direccion: String
   }
 
 `;

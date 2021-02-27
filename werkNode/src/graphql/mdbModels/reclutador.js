@@ -6,6 +6,18 @@ const redesSocialesArraySchema = new Schema({
   url: { type: String },
 });
 
+const categoriasContratanteArraySchema = new Schema({
+  _id: false,
+  tipo: { type: String },
+  nombre: { type: String },
+});
+
+const tagsContratanteArraySchema = new Schema({
+  _id: false,
+  nombre: { type: String },
+  experiencia: { type: String },
+});
+
 const reclutadorSchema = new Schema({
   informacion_personal: {
     nombre:{
@@ -17,7 +29,6 @@ const reclutadorSchema = new Schema({
   },
   werker: {
     empresa_id: { type: String, default: undefined },
-    factura: { type: Boolean, default: false },
     ubicacion: {
       pais: { type: String, default:'MEX' },
       estado: { type: String },
@@ -40,7 +51,9 @@ const reclutadorSchema = new Schema({
     redes_sociales: { type: [redesSocialesArraySchema], default: undefined},
     url: { type: String },
     correo: { type: String },
-  }
+  },
+  categorizaciones_interes: { type: [categoriasContratanteArraySchema], default: undefined },
+  tags_interes: { type: [tagsContratanteArraySchema], default: undefined }
   },
   { timestamps: true }
 );

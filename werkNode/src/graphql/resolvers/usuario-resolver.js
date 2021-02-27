@@ -17,10 +17,7 @@ module.exports = {
       input.password = await bcrypt.hash(input.password, 10);
        try {
          const nuevoUsuario = new werkModels.Usuario(input);
-         await nuevoUsuario.save(function (err){
-           //falta agregar la información del id del objeto freelance creado y pasarolo al guardado de un nuevoUsuario
-           contsNuevoFreelance = new werkModels.ObjetoWerk();
-         });
+         await nuevoUsuario.save();
          return nuevoUsuario;
        } catch (e) {
          console.log(e);

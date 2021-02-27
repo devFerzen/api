@@ -24,7 +24,7 @@ mongoose.connect(config.mongoUrl, {
     useNewUrlParser: true,
     useCreateIndex: false,
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    useFindAndModify: false
   })
   .then(mongoose => console.log(">>> DB online"))
   .catch(err => console.log("MongoDB Err", err));

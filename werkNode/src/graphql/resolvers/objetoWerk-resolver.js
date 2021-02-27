@@ -81,6 +81,7 @@ module.exports = {
       }
       return answer;
     },
+    //omitUndefined=false para quitar campos cuando esten vacioes
     async actualizandoObjetoWerk(_, { id, input }, { werkModels }){
       const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
         {_id: id},
