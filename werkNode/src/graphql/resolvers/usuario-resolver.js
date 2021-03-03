@@ -3,10 +3,17 @@ import crearTokens from '../../utilities/auth';
 
 module.exports = {
   Query: {
-    userActivo: (_, args, { werkModels, activeUser }) => {
-      console.log(">>> activeUser " + activeUser);
+    userActivo: async (_, args, { werkModels, activeUser }) => {
       if(activeUser){
-        return werkModels.Usuario.findOne({_id: activeUser.id});
+        try {
+          const user = await werkModels.Usuario.findOne({_id: activeUser.id});
+          if(!user){
+            throw new Error('Usuario no existe!');
+          }
+          return user;
+        } catch (e) {
+          throw new Error('Error interno');
+        }
       }
       return null;
     },
@@ -27,10 +34,12 @@ module.exports = {
     async loginUsuario(_, {correo, password}, { werkModels, res } ){
       //Validar información
 
-      const userLogged = await werkModels.Usuario.findOne({correo: correo, estado:1});
+      //Login con trasferencia de datos de los dos tipos - pendiente
+      const userLogged = await werkModels.Usuario.findOne({correo: correo, estado: true});
       if(!userLogged){
         throw new Error('Usuario no existe!');
       }
+      console.dir(userLogged);
 
       let passwordMatch = await bcrypt.compare(password, userLogged.password);
       if(!passwordMatch){

@@ -21,7 +21,7 @@ const contratanteType = gql `
   }
 
   type Mutation {
-    creandoPerfilContratante( input: paramsPerfilInput! ): String!
+    creandoPerfilContratante( input: paramsPerfilInput! ): PerfilContratante!
     actualizandoPerfilContratante( id: String!, input: paramsPerfilInput! ): PerfilContratante!
   }
 

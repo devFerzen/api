@@ -21,38 +21,38 @@
       </b-container>
     </div>
     <div v-if="userIs == 'freelance'">
-      <b-container fluid="md" align="left" class="portafolio" style="margin-top:60px;">
+      <b-container fluid="md" align="left" class="portafolio" style="margin-top:140px;">
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS ANUNCIOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS PORTAFOLIOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">VACANTES DE ACUERDO A MI PERFIL</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">FAVORITOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
       </b-container>
     </div>
     <div v-else>
-      <b-container fluid="md" align="left" class="portafolio" style="margin-top:60px;">
+      <b-container fluid="md" align="left" class="portafolio" style="margin-top:140px;">
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS VACANTES</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">FAVORITOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk></carruseles-werk>
+          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
       </b-container>
     </div>
@@ -137,6 +137,14 @@ export default {
   },
   data() {
     return{
+      defaultCarruselAnuncio: {
+        "id_list": [
+        "600f9e1c015c570ab870f3f8","600f9ec8015c570ab870f3f9","600f9ef1015c570ab870f3fa",
+        "600f9f36015c570ab870f3fb","600f9f4f015c570ab870f3fc","600f9f8c015c570ab870f3fd",
+        "600f9f98015c570ab870f3fe","600f9fa4015c570ab870f3ff","600f9fa8015c570ab870f400"
+      ],
+        "tipo_objeto": "Anuncio"
+      },
     }
   },
   computed: {

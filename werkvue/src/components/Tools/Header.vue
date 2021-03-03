@@ -17,14 +17,14 @@
     <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
     <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav v-if="this.activeUser == 'Visitante'">
+      <b-navbar-nav v-if="this.activeUser === 'Visitante'">
         <b-nav-item href="#">FREELANCER</b-nav-item>
         <b-nav-item href="#">CONTRATANTE</b-nav-item>
         <b-nav-item href="#">werkcoins..</b-nav-item>
         <b-nav-item href="#">werk..packs</b-nav-item>
         <b-nav-item href="#">SMART</b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav v-else>
+      <b-navbar-nav v-else-if="this.activeUser ==! 'Visitante'">
         <b-nav-item :to="{name:'werker-home-route'}">Home</b-nav-item>
       </b-navbar-nav>
 
@@ -32,7 +32,7 @@
         <b-nav-item @click="showISModal" class="buttonInicio">INICIAR SESIÓN</b-nav-item>
         <b-nav-item @click="showRModal" class="buttonRegister">REGISTRARSE</b-nav-item>
       </b-navbar-nav>
-      <b-navbar-nav class="ml-auto" v-else>
+      <b-navbar-nav class="ml-auto" v-else-if="this.activeUser ==! 'Visitante'">
         <b-nav-item @click="showISModal">Hola, {{ shortName }}</b-nav-item>
         <b-nav-item>
           <b-img

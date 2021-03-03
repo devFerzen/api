@@ -47,6 +47,7 @@ const globalTypes = gql `
 
   type _werker {
     id: String
+    tipo: String
     empresa_id: String
     nombre: _nombre
     factura: Boolean
@@ -56,6 +57,7 @@ const globalTypes = gql `
 
   input input_werker {
     id: String
+    tipo: String
     empresa_id: String
     nombre: input_nombre
     factura: Boolean

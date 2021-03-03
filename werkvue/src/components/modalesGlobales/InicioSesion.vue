@@ -155,7 +155,6 @@ export default {
             correo: $correo
             password: $password
           ){
-            _id
             sobreNombre
             werker{
               tipo
@@ -170,7 +169,7 @@ export default {
       actUserStore: 'Autenticacion/actUserStore'
     }),
     navigateToWerkerHomePage(val){
-      if(val == "Freelance" || val == "Contratante"){
+      if(val == "freelance" || val == "contratante"){
         router.push({ name: "werker-home-route"});
       }
     },
@@ -181,6 +180,8 @@ export default {
     iniciandoSesionStore(val) {
         //Mandar al store los valores de inicio de sesion
         this.actUserStore(val.data.loginUsuario);
+        console.dir(val);
+        console.log(val.data.loginUsuario.werker.tipo);
         this.navigateToWerkerHomePage(val.data.loginUsuario.werker.tipo);
         this.ISHideModal();
     },

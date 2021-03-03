@@ -52,7 +52,7 @@ module.exports = {
       const objectWerk = werkModels.ObjetoWerk.findById(args.params_query.id_list[0]);
       return objectWerk;
     },
-    qObjectWerk:(_, args, { werkModels }) => {
+    qObjectWerk: (_, args, { werkModels }) => {
       const ids = args.params_query.id_list;
       //const objectWerkType = args.params_query.tipo_objeto;
       const objectWerkList = werkModels.ObjetoWerk.find({'_id':{$in: ids}});

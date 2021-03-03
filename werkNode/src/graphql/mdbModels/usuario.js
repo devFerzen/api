@@ -31,6 +31,7 @@ const usuarioSchema = new Schema({
   correo: { type: String, maxlength:50, unique:true, required:true },
   password: { type: String, maxlength:1024, required:true },
   werker: {
+    tipo: { type: String, required: true },
     id: { type: Schema.Types.ObjectId, ref: 'objetoWerk'},
   },
   obj_werk_fav: [{
