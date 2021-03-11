@@ -51,7 +51,7 @@
           "ciudad": "Monterrey"
         }
       },
-      "tipo_perfil": "HeadHunter",
+      "tipo_perfil": 1,
       "negocio": {
         "nombre": "El mas verga del mundo",
         "descripcion": "El negocio más verga del mundo",
@@ -112,7 +112,7 @@
             "ciudad": "Monterrey"
           }
         },
-        "tipo_perfil": "HeadHunter",
+        "tipo_perfil": 2,
         "negocio": {
           "nombre": "El mas verga del mundo",
           "descripcion": "El negocio más verga del mundo",

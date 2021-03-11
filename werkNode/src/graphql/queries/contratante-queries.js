@@ -5,7 +5,7 @@ const contratanteType = gql `
   type PerfilContratante {
     informacion_personal: _informacion_personal
     werker: _werker
-    tipo_perfil: String
+    tipo_perfil: Int
     negocio: _negocio
     contacto: _contacto
     categorizaciones_interes: [_categorizacion]
@@ -28,7 +28,7 @@ const contratanteType = gql `
   input paramsPerfilInput {
     informacion_personal: input_informacion_personal
     werker: input_werker
-    tipo_perfil: String
+    tipo_perfil: Int
     negocio: input_negocio
     contacto: input_contacto
     categorizaciones_interes: [input_categorizacion]

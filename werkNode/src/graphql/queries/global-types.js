@@ -77,8 +77,8 @@ const globalTypes = gql `
 
   type _objeto_werk {
     tipo: String
-    esquemas: [String]
-    capacidad: [String]
+    esquemas: [Int]
+    capacidad: [Int]
     estatus: _estatus
     smart: _smart
     destacado: _destacado
@@ -89,8 +89,8 @@ const globalTypes = gql `
 
   input input_objeto_werk {
     tipo: String
-    esquemas: [String]
-    capacidad: [String]
+    esquemas: [Int]
+    capacidad: [Int]
     estatus: input_estatus
     smart: input_smart
     destacado: input_destacado
@@ -101,8 +101,8 @@ const globalTypes = gql `
 
   type _objeto_werk_hardbane {
     tipo: String
-    esquemas: [String]
-    capacidad: [String]
+    esquemas: [Int]
+    capacidad: [Int]
     estatus: _estatus_hardbane
     smart: _smart
     destacado: _destacado
@@ -253,6 +253,17 @@ const globalTypes = gql `
     anos_activos: String
     telefono: String
     direccion: String
+  }
+
+  enum objetoWerkEnumTypes {
+    anuncio
+    freelance
+    vacante
+  }
+
+  enum accionSocialEnumTypes {
+    favorito
+    like
   }
 
 `;

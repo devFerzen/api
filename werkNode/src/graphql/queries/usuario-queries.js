@@ -31,8 +31,8 @@ const usuarioType = gql `
   type Mutation {
     creandoUsuario(input: UsuarioInput): User
     loginUsuario(correo: String!, password: String!): User
-    removeFavLike(id: String!, tipo: ObjetoWerkTipoType!, accion: accionSocialType!): String!
-    addFavLike(id: String!, tipo: ObjetoWerkTipoType!, accion: accionSocialType!): String!
+    removeFavLike(id: String!, tipo: objetoWerkEnumTypes!, accion: accionSocialEnumTypes!): String!
+    addFavLike(id: String!, tipo: objetoWerkEnumTypes!, accion: accionSocialEnumTypes!): String!
   }
 
   input UsuarioInput {

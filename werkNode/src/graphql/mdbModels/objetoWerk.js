@@ -24,6 +24,7 @@ const objetosWerkArraySchema = new Schema({
   id: { type: String }
 });
 
+let correoRegexp = /.+\@.+\..+/;
 
 const objetoWerkSchema = new Schema({
   titulo: { type: String, maxlength:40 },
@@ -34,7 +35,7 @@ const objetoWerkSchema = new Schema({
       apellidos: { type: String }
     },
     nacimiento: { type: Date },
-    genero: { type: String }
+    genero: { type: String, lowercase: true, enum: ['masculino', 'femenino'] }
   },
   habilidades_req: { type: [String], default: undefined },
   prestaciones_beneficios: { type: [String], default: undefined },
@@ -45,12 +46,12 @@ const objetoWerkSchema = new Schema({
   negocio: {
     nombre: { type: String, default: undefined },
     descripcion: { type: String, default: undefined },
-    anos_activos: { type: String, default: undefined}
+    anos_activos: { type: String, default: undefined } //el tipo de valor es correcto para esta propiedad???
   },
   categorizaciones: { type: [categoriasArraySchema], default: undefined},
   tags: { type: [tagsArraySchema], default: undefined},
   areasDeEspecialidad: { type: [String], default: undefined },
-  portafolios: { type: [Schema.Types.ObjectId], ref: 'objetoWerk', default: undefined},
+  portafolios: { type: [Schema.Types.ObjectId], ref: 'portafolio', default: undefined},
   contacto: {
     telefonos: {
       fijo: { type: String },
@@ -58,7 +59,7 @@ const objetoWerkSchema = new Schema({
     },
     redes_sociales: { type: [redesSocialesArraySchema], default: undefined},
     url: { type: String },
-    correo: { type: String },
+    correo: { type: String, match: correoRegexp },
   },
   werker: {
     id: { type: String, default: undefined },
@@ -75,9 +76,11 @@ const objetoWerkSchema = new Schema({
     objetos_werk: { type: [objetosWerkArraySchema], default: undefined}
   },
   objeto_werk: {
-    tipo: { type: String },
-    esquemas: [{ type: String }],
-    capacidad: [{ type: String }],
+    tipo: { type: String, required: true, enum: ['vacante', 'freelance', 'anuncio'] },
+    // esquemas { 1 => 'Por proyecto (Única ocasión)', 2 => 'Por proyecto (Recurrente o ampliado)', 3 => 'Contrato Indefinido. - Honorarios' }
+    esquemas: [{ type: Number, enum: [1, 2, 3] }],
+    // capacidad { 1 => 'En oficinas de forma presencial ', 2 => 'Home Office - 100% Virtual', 3 => 'Flex (Home Office y Oficina)' }
+    capacidad: [{ type: Number, enum: [1, 2, 3] }],
     estatus: {
       tipo: { type: Boolean, default: false },
       razon: String,
@@ -103,5 +106,6 @@ const objetoWerkSchema = new Schema({
   { timestamps: true }
 );
 
+objetoWerkSchema.index({ 'categorizaciones.nombre': 1 });
 const objetoWerk = model('objetoWerk', objetoWerkSchema);
 export default objetoWerk;

@@ -8,7 +8,6 @@ import portafolioQueries from './queries/portafolio-queries';
 import contratanteQueries from './queries/contratante-queries';
 
 import globalTypes from './queries/global-types';
-import estatusCategoriesTypes from './queries/estatusCategories-types';
 
 import usuarioResolvers from './resolvers/usuario-resolver';
 import objetoWerkResolvers from './resolvers/objetoWerk-resolver';
@@ -21,7 +20,6 @@ const typeDefs = mergeTypeDefs([usuarioQueries,
                                 portafolioQueries,
                                 contratanteQueries,
                                 globalTypes,
-                                estatusCategoriesTypes
                               ]);
 const resolver = mergeResolvers([usuarioResolvers,
                                 objetoWerkResolvers,

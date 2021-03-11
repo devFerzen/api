@@ -26,12 +26,15 @@ const tagsContratanteArraySchema = new Schema({
   experiencia: { type: String },
 });
 
+let correoRegexp = /.+\@.+\..+/;
+
 const usuarioSchema = new Schema({
   sobreNombre: { type: String, maxlength:30, unique: true, required: true },
-  correo: { type: String, maxlength:50, unique:true, required:true },
+  correo: { type: String, maxlength:50, unique:true, required:true, match: correoRegexp },
   password: { type: String, maxlength:1024, required:true },
   werker: {
-    tipo: { type: String, required: true },
+    // tipo { 'freelance', 'contratante' }
+    tipo: { type: String, required: true, enum: ['freelance', 'contratante'] },
     id: { type: Schema.Types.ObjectId, ref: 'objetoWerk'},
   },
   obj_werk_fav: [{
@@ -51,9 +54,6 @@ const usuarioSchema = new Schema({
   estado: { type: Boolean, default: true },
   token_count: { type:Number, default: 0 },
   schema_version: { type: Number },
-
-
-
   datos_facturacion: { type: [facturacionArraySchema], default: undefined},
   categorizaciones_contratante: { type: [categoriasContratanteArraySchema], default: undefined},
   tags_contratante: { type: [tagsContratanteArraySchema], default: undefined},

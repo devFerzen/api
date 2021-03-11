@@ -18,6 +18,8 @@ const tagsContratanteArraySchema = new Schema({
   experiencia: { type: String },
 });
 
+let correoRegexp = /.+\@.+\..+/;
+
 const reclutadorSchema = new Schema({
   informacion_personal: {
     nombre:{
@@ -25,7 +27,7 @@ const reclutadorSchema = new Schema({
       apellidos: { type: String }
     },
     nacimiento: { type: Date },
-    genero: { type: String }
+    genero: { type: String, lowercase: true, enum: ['masculino', 'femenino'] }
   },
   werker: {
     empresa_id: { type: String, default: undefined },
@@ -35,7 +37,8 @@ const reclutadorSchema = new Schema({
       ciudad: { type: String }
     }
   },
-  tipo_perfil: { type: String, default: 1 },
+  // tipo_perfil { 1 => 'PERSONAL INDEPENDIENTE', 2 => 'DUEÑO DE NEGOCIO', 3 => 'RECLUTADOR / HEADHUNTER' }
+  tipo_perfil: { type: Number, default: 1, lowercase: true, enum: [ 1, 2, 3] },
   negocio: {
     nombre: { type: String, default: undefined },
     descripcion: { type: String, default: undefined },
@@ -50,7 +53,7 @@ const reclutadorSchema = new Schema({
     },
     redes_sociales: { type: [redesSocialesArraySchema], default: undefined},
     url: { type: String },
-    correo: { type: String },
+    correo: { type: String, match: correoRegexp },
   },
   categorizaciones_interes: { type: [categoriasContratanteArraySchema], default: undefined },
   tags_interes: { type: [tagsContratanteArraySchema], default: undefined }
