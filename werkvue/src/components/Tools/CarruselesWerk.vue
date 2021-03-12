@@ -61,7 +61,7 @@ import 'hooper/dist/hooper.css';
 
 import WerkCards from '@/components/Tools/WerkCards.vue';
 
-import gql from "graphql-tag";
+import gql from "graphql-tag"; // AFSS - validar si en realidad se usa con this.$apllo, según yo no...
 import { WERK_OBJECT_LIST_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
 
 export default {
@@ -105,13 +105,12 @@ export default {
 
   },
 
-  // dependiendo del prop hacer la tarjeta (quizás una tarjeta universal)
-  // falta después ver la manera de como pasar los filtros de búsqueda
+  // AFSS - dependiendo del prop hacer la tarjeta (quizás una tarjeta universal)
+  // AFSS - falta después ver la manera de como pasar los filtros de búsqueda
   async created () {
     let params_query = this.paramsQuery;
     console.dir(params_query);
-     this.gqlQueryResult = await this.$apollo.query(
-       { query: WERK_OBJECT_LIST_QUERY,
+     this.gqlQueryResult = await this.$apollo.query({ query: WERK_OBJECT_LIST_QUERY,
          variables: {
            params_query
         }

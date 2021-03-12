@@ -581,7 +581,8 @@
 <script>
 
   import { WERK_OBJECT_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
-
+  //Falta el objetoqUERIES
+  
   export default {
     data() {
       return {

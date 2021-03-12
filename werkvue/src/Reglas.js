@@ -24,6 +24,16 @@ catch.????
 dos lugares dentro de la aplicación se le convierte en un componente Vue y si se
 ocupa se le parametriza.
 
+**El consumo de componentes y props deberán de estar siempre en la parte de arriba
+
+**Props esta bajo una nomenclatura de lowerCamelCase
+
+**Importación de componentes esta bajo una nomeclatura de upperCamelCase y su consumo
+dentro de HTML esta bajo kebab-case.
+
+**Template, CSS, Script se deben de ocultar correctamente con las flechas de la
+barra de númeración lateral
+
 >>>Base de datos
 **Parametro en funciones graphql: Los parametros que necesiten un tipo de input
 para ejecutar un query o resolver se le anexará la palabra Input al final

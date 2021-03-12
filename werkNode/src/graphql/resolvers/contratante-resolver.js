@@ -12,6 +12,7 @@ module.exports = {
     }
   },
   Mutation: {
+
     /**
    * Crea un perfil Tipo: Contratante.
    *
@@ -29,6 +30,7 @@ module.exports = {
         throw new Error('Error al crear el perfil');
       }
     },
+
     /**
    * Actualiza un perfil Tipo: Contratante.
    *
@@ -37,7 +39,7 @@ module.exports = {
    * @return {Object} union PerfilContratante.
    Descripción*/
     async actualizandoPerfilContratante(_,{ id, input }, { werkModels }){
-      //Actualiza todos los embedded objects dentro de un documento, si una propiedad
+      // AFSS Actualiza todos los embedded objects dentro de un documento, si una propiedad
       //de un objeto embedded este lo pasará a nulo... pero si no se pasa todo el objeto
       //en si, no pasa nada,,, no lo borra
       try {

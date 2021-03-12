@@ -6,18 +6,54 @@
 
 //*****Contratante
   /*
-  query informacionPerfilContratante( $paramsPerfil: paramsPerfilViewInput!){
-    informacionPerfilContratante(paramsPerfil: $paramsPerfil){
-        informacion_personal{
-          nombre{
-            nombres
-            apellidos
+  query informacionPerfilContratante($params: paramsPerfilViewInput!){
+    informacionPerfilContratante(paramsPerfil: $params){
+      informacion_personal{
+        nombre{
+          nombres
+          apellidos
           }
-          genero
-          nacimiento
+        nacimiento
+        genero
+      }
+      werker{
+        empresa_id
+        ubicacion{
+          pais
+          estado
+          ciudad
         }
       }
+      tipo_perfil
+      negocio{
+        nombre
+        descripcion
+        anos_activos
+        telefono
+        direccion
+      }
+      contacto{
+        telefonos{
+          fijo
+          celular
+        }
+        redes_sociales{
+          red
+          url
+        }
+        url
+        correo
+      }
+      categorizaciones_interes{
+        tipo
+        nombre
+      }
+      tags_interes{
+        nombre
+        experiencia
+      }
     }
+  }
     ---------------------------------------
     {
   "paramsPerfil": {
@@ -86,17 +122,54 @@
   mutation actualizandoPerfilContratante($id: String!, $input: paramsPerfilInput!){
       actualizandoPerfilContratante(id: $id, input: $input){
         informacion_personal{
-          nombre {
+          nombre{
             nombres
             apellidos
-          }
+            }
           nacimiento
           genero
+        }
+        werker{
+          empresa_id
+          ubicacion{
+            pais
+            estado
+            ciudad
+          }
+        }
+        tipo_perfil
+        negocio{
+          nombre
+          descripcion
+          anos_activos
+          telefono
+          direccion
+        }
+        contacto{
+          telefonos{
+            fijo
+            celular
+          }
+          redes_sociales{
+            red
+            url
+          }
+          url
+          correo
+        }
+        categorizaciones_interes{
+          tipo
+          nombre
+        }
+        tags_interes{
+          nombre
+          experiencia
         }
       }
     }
     ---------------------------------------
     {
+      "id": "603aa15b8925d86df0f18ae9",
       "input": {
         "informacion_personal": {
           "nombre": {
