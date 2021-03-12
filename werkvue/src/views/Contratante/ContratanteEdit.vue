@@ -394,7 +394,10 @@ import { CONTRATANTE_UPDATE_MUTATE } from '../../graphql/queries/contratanteQuer
 
 export default {
   props: {
-    id: String
+    id: {
+      type: String,
+      default: '0'
+    }
   },
   data() {
     return {
@@ -404,7 +407,7 @@ export default {
           nombre: {
             nombres: 'Alan Ferzen',
             apellidos: 'Secenas Siller'
-          }
+          },
           nacimiento: '1989-12-01T05:00:00.000+00:00',
           genero: 'masculino',
         },
@@ -432,7 +435,7 @@ export default {
         negocio: {
           nombre: 'ALAN ENTERPRAISE',
           descripcion: 'HAHAHAHAHAHAHAHA',
-          anos_activos: '5'
+          anos_activos: 3
         },
         categorizaciones: [
           {
@@ -529,14 +532,19 @@ export default {
     }
   },
   methods: {
-    contratanteUpdate(){
+    contratanteSaveUpdate(){
 
-      let input = this.contratanteInfo;
+      let params = {};
+      params.input = this.contratanteInfo;
+
+      if(this.id === '0'){
+        params.id =  this.id;
+      }
+
       const answer = this.$apollo.mutate({
-        mutation: CONTRATANTE_UPDATE_MUTATE,
+        mutation: this.id === '0' ? CONTRATANTE_NEW_MUTATE : CONTRATANTE_UPDATE_MUTATE,
         variables: {
-          this.id,
-          input
+          params
         }
       });
       console.dir(answer);

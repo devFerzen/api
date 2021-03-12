@@ -428,7 +428,6 @@
             </b-col>
             <b-col style="display: flex; justify-content: flex-end;" cols="3" align-self="center">
               <b-form-checkbox class="edit-input-checkbox" v-model="freelance.factura" switch size="lg"></b-form-checkbox>
-              <b-button @click="showDFModal()">CLICK</b-button>
               <font-awesome-icon :icon="['fab', 'twitter']" class="facturacion-acciones-icons" />
               <font-awesome-icon :icon="['fab', 'twitter']" class="facturacion-acciones-icons" />
             </b-col>
@@ -437,7 +436,7 @@
         <!--datos-facturacion-->
 
         <b-row style="clear: both;">
-          <b-button pill class="werk-main-buttom shadow-none mx-auto" @click="objetoWerkSave()">GUARDAR</b-button>
+          <b-button pill class="werk-main-buttom shadow-none mx-auto" @click="objetoWerkSaveUpdate()">GUARDAR</b-button>
         </b-row>
       </b-form>
     </b-container>
@@ -580,59 +579,96 @@
 
 <script>
 
-  import { WERK_OBJECT_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+  import { WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
   //Falta el objetoqUERIES
-  
+
   export default {
+    props: {
+      id: {
+        type: String,
+        default: '0'
+      }
+    }
     data() {
       return {
         freelance: {
-          informacion_personal: {
-            genero: 'masculino',
-            nacimiento: '1989-12-01T05:00:00.000+00:00',
-            nombre: {
-              nombres: 'Alan Ferzen',
-              apellidos: 'Secenas Siller'
-            }
-          },
-          descripcion: '',
-          contacto:{
-            telefonos: {
-              fijo: '8300000',
-              celular: '8110000000'
+          "informacion_personal": {
+            "nombre": {
+              "nombres": "Pacheco Chupame",
+              "apellidos": "Melap Utonio"
             },
-            url: 'wwww.alan.com',
-            correo: 'alan@alan.com',
-            redes_sociales: []
+            "nacimiento": "1989-12-01T05:00:00.000+00:00",
+            "genero": "masculino"
           },
-          werker:{
-            factura: true,
-            ubicacion: {
-              pais: 'Mx',
-              ciudad: 'Ensenada',
-              estado: 'NLE'
-            }
+          "negocio": {
+            "nombre": "Pies company",
+            "descripcion": "Vendo fotos de pies",
+            "anos_activos": 1
           },
-          objeto_werk: {
-            tipo: 'freelance'
-          },
-          negocio: {
-            nombre: 'ALAN ENTERPRAISE',
-            descripcion: 'HAHAHAHAHAHAHAHA',
-            anos_activos: '5'
-          },
-          categorizaciones: [
+          "areas_de_especialidad": ["Fotos de pie completo", "Fotos de talón", "Fotos de dedos raros"],
+          "descripcion": "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+          "categorizaciones": [
             {
               "tipo": "categoria",
-              "nombre": "Finanzas"
-            }
-          ],
-          tags: [
+              "nombre": "Marketing"
+          	},
+          	{
+              "tipo": "categoria",
+              "nombre": "Fotografía"
+            },
+          	{
+              "tipo": "sub-categoria",
+              "nombre": "Publicidad"
+            }],
+          "tags": [{
+            "nombre": "Pies",
+            "experiencia": 5
+          },
+          {
+            "nombre": "Fotografía Nocturna Astral",
+            "experiencia": 1
+          }],
+          "contacto": {
+            "telefonos": {
+              "fijo": "83000000",
+              "celular": "8110000000"
+            },
+            "redes_sociales": [{
+              "red": "faWhatsapp",
+              "url": "url@urlwhatsapp"
+            },
             {
-              nombre:"hola",
-              experiencia:1
+              "red": "faTwitter",
+              "url": "url@urltwitter"
+            },
+            {
+              "red": "faLinkedin",
+              "url": "url@urllinkedin"
+            }]
+          },
+          "werker": {
+            "factura": true,
+            "ubicacion": {
+              "pais": "MX",
+              "estado": "NLE",
+              "ciudad": "MTY"
+            },
+            "objetos_werk": [{
+              "tipo": "anuncio",
+              "id": "600f9fa8015c570ab870f400"
+            },{
+              "tipo": "anuncio",
+              "id": "600f9fa4015c570ab870f3ff"
+            }]
+          },
+          "objeto_werk": {
+            "tipo": "freelance",
+            "esquemas": [1,2,3],
+            "capacidad": [1,2],
+            "estatus": {
+              "tipo": true
             }
-          ],
+          }
         },
         redes_sociales: {
           facebook: '',
@@ -725,6 +761,7 @@
     },
     methods:{
       showDFModal(){
+        //AFSS - esta funcion esta pendiente de pasar a modal config
         const params = {
           title: "puto"
         };
@@ -736,18 +773,21 @@
         }*/
         this.freelance.tags.push({nombre: valor.werkTagNombre, exp: valor.werkTagExp});
       },
-      objetoWerkSave(){
-        //Validación
-        let input = this.freelance;
+      objetoWerkSaveUpdate(){
+        // AFSS - Pendiente Validación
+        let params = {};
+        params.input = this.freelance;
 
-        //Condicional Si pasa mandar a llamar la mutacion
+        if(this.id === '0'){
+          params.id = this.id;
+        }
+
         const answer = this.$apollo.mutate({
-          mutation: WERK_OBJECT_MUTATE,
+          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE
           variables: {
-            input
+            params
           }
         });
-        console.log("lo logro?");
         console.dir(answer);
       }
     },

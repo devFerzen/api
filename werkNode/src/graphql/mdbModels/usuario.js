@@ -35,7 +35,7 @@ const usuarioSchema = new Schema({
   werker: {
     // tipo { 'freelance', 'contratante' }
     tipo: { type: String, required: true, enum: ['freelance', 'contratante'] },
-    id: { type: Schema.Types.ObjectId, ref: 'objetoWerk'},
+    id: { type: String, default: undefined },
   },
   obj_werk_fav: [{
     id: { type: String },

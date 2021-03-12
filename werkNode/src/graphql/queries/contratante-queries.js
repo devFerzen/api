@@ -3,6 +3,7 @@ import gql from 'graphql-tag';
 const contratanteType = gql `
 
   type PerfilContratante {
+    id: ID
     informacion_personal: _informacion_personal
     werker: _werker
     tipo_perfil: Int
@@ -21,11 +22,16 @@ const contratanteType = gql `
   }
 
   type Mutation {
-    creandoPerfilContratante( input: paramsPerfilInput! ): PerfilContratante!
-    actualizandoPerfilContratante( id: String!, input: paramsPerfilInput! ): PerfilContratante!
+    creandoPerfilContratante( params: ParamsContratanteInput! ): PerfilContratante!
+    actualizandoPerfilContratante( params: ParamsContratanteInput! ): PerfilContratante!
   }
 
-  input paramsPerfilInput {
+  input ParamsContratanteInput {
+    id: String,
+    input: ParamsPerfilInput!
+  }
+
+  input ParamsPerfilInput {
     informacion_personal: input_informacion_personal
     werker: input_werker
     tipo_perfil: Int

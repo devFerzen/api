@@ -242,7 +242,7 @@ const globalTypes = gql `
   type _negocio {
     nombre: String
     descripcion: String
-    anos_activos: String
+    anos_activos: Int
     telefono: String
     direccion: String
   }
@@ -250,7 +250,7 @@ const globalTypes = gql `
   input input_negocio {
     nombre: String
     descripcion: String
-    anos_activos: String
+    anos_activos: Int
     telefono: String
     direccion: String
   }

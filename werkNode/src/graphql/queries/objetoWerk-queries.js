@@ -24,7 +24,7 @@ const objetoWerkType = gql `
     objeto_werk: _objeto_werk
 
     informacion_personal: _informacion_personal
-    areasDeEspecialidad: [String]
+    areas_de_especialidad: [String]
     costo: _costo
     negocio: _negocio
   }
@@ -39,7 +39,7 @@ const objetoWerkType = gql `
     objeto_werk: _objeto_werk
 
     informacion_personal: _informacion_personal
-    areasDeEspecialidad: [String]
+    areas_de_especialidad: [String]
     costo: _costo
     negocio: _negocio
   }
@@ -54,7 +54,7 @@ const objetoWerkType = gql `
     objeto_werk: _objeto_werk
 
     titulo: String
-    areasDeEspecialidad: [String]
+    areas_de_especialidad: [String]
     costo: _costo
   }
 
@@ -68,7 +68,7 @@ const objetoWerkType = gql `
     objeto_werk: _objeto_werk
 
     titulo: String
-    areasDeEspecialidad: [String]
+    areas_de_especialidad: [String]
     costo: _costo
   }
 
@@ -130,11 +130,16 @@ const objetoWerkType = gql `
   }
 
   type Mutation {
-    creandoObjetoWerk(input: ObjWerkInput!): IObjetoWerk
+    creandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
+    actualizandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
     eliminandoObjetoWerk(id: String!): String
-    actualizandoObjetoWerk(id: String!, input: ObjWerkInput!): IObjetoWerk
     bloqDesbloqObjetoWerk(id: String!, input: BloqDesbloqInput!): String!
     reportObjetoWerk(id: String!, razon: String!, descripcion: String ): String!
+  }
+
+  input ParamsObjetoWerkInput {
+    id: String
+    input: ObjWerkInput!
   }
 
   input ObjWerkInput {
@@ -153,7 +158,7 @@ const objetoWerkType = gql `
     contacto: input_contacto
 
     informacion_personal: input_informacion_personal
-    areasDeEspecialidad: [String]
+    areas_de_especialidad: [String]
 
   }
 

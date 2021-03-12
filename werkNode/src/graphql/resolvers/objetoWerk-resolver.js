@@ -58,16 +58,22 @@ module.exports = {
       const objectWerkList = werkModels.ObjetoWerk.find({'_id':{$in: ids}});
       //const objectWerkList = await werkModels.ObjetoWerk.find().where('_id').in(ids).exec();
       return objectWerkList;
-    }//Change name to ViewList
+    }
   },
   Mutation: {
-    async creandoObjetoWerk(_,{ input }, { werkModels }){
-      //Global validation si werkUser
+    async creandoObjetoWerk(_,{ params }, { werkModels }){
+      try {
+        const result = await new werkModels.ObjetoWerk(params.input).save();
 
-      const newObjetoWerk = new werkModels.ObjetoWerk(input);
-      await newObjetoWerk.save();
-      console.log(newObjetoWerk);
-      return newObjetoWerk;
+        if(params.input.objeto_werk.tipo === 'freelance'){
+          /*await werkModels.Usuario.update(
+              { _id: "6002706a8343ff508c0316d3" },
+                { "$set": { "werker.id": result.id } });*/
+        }
+        return result;
+      } catch (e) {
+        throw new Error(e);
+      }
     },
     async eliminandoObjetoWerk(_, { id }, { werkModels }){
       let answer;
@@ -82,10 +88,10 @@ module.exports = {
       return answer;
     },
     //omitUndefined=false para quitar campos cuando esten vacioes
-    async actualizandoObjetoWerk(_, { id, input }, { werkModels }){
+    async actualizandoObjetoWerk(_, { params }, { werkModels }){
       const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
-        {_id: id},
-          input,
+        {_id: params.id},
+          params.input,
             null,
               function(err, doc){
                 if(err){
@@ -120,6 +126,8 @@ module.exports = {
               //Pendiente el regreso de llamada en graphql
               //investigación de llamado de returno graphql
     },
+
+    // AFSS - Funcion de reportar un objeto werk, hay que transformarla en algo global
     async reportObjetoWerk(_, { id, razon, descripcion }, { werkModels }){
       let answer;
       let queryAplicado = { _id: userLogged };

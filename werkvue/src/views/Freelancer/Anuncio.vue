@@ -20,9 +20,9 @@
           <p class="mb-4"> {{objetoWerkData.descripcion}} </p>
         </div>
 
-        <div class="anuncio-especialidades-mv mt-4" v-if="objetoWerkData.areasDeEspecialidad">
+        <div class="anuncio-especialidades-mv mt-4" v-if="objetoWerkData.areas_de_especialidad">
           <h5 class="mb-4">ÁREAS DE ESPECIALIDAD</h5>
-          <p class="mb-0" v-for=" (area, index) in objetoWerkData.areasDeEspecialidad" :key="index">- {{area}}. </p>
+          <p class="mb-0" v-for=" (area, index) in objetoWerkData.areas_de_especialidad" :key="index">- {{area}}. </p>
         </div>
 
         <div class="anuncio-banda-costo-mv  mt-4">

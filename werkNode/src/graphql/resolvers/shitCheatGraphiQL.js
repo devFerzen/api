@@ -1,9 +1,4 @@
 
-//QUERIES >>>>
-//*****Usuario
-
-
-
 //*****Contratante
   /*
   query informacionPerfilContratante($params: paramsPerfilViewInput!){
@@ -62,10 +57,6 @@
   }
   -Query informacionPerfilContratante*/
 
-//RESOLVERS >>>>
-//*****Usuario
-
-//*****Contratante
   /*
   mutation creandoPerfilContratante($input: paramsPerfilInput!{
     creandoPerfilContratante(input: $input)
@@ -215,3 +206,178 @@
       }
     }
   -Resolver actualizandoPerfilContratante*/
+
+
+  //*****ObjetoWerk
+  /*
+  mutation creandoObjetoWerk($input: ObjWerkInput!){
+    creandoObjetoWerk(input: $input){
+      descripcion,
+      categorizaciones{
+          tipo
+          nombre
+        }
+        tags{
+          nombre
+          experiencia
+        }
+        contacto{
+          telefonos{
+            fijo
+            celular
+          }
+          redes_sociales{
+            red
+            url
+          }
+          url
+          correo
+        }
+        werker{
+          id
+          nombre {
+            nombres
+            apellidos
+          }
+          factura
+          ubicacion{
+            pais
+            estado
+            ciudad
+          }
+          objetos_werk{
+            tipo
+            id
+          }
+        }
+        objeto_werk{
+          tipo
+          esquemas
+          capacidad
+          estatus{
+            tipo
+          }
+        }
+      ... on Freelance{
+        informacion_personal{
+          nombre{
+            nombres
+            apellidos
+          }
+          nacimiento
+          genero
+        }
+        negocio{
+          nombre
+          descripcion
+          anos_activos
+        }
+        areas_de_especialidad
+        costo{
+          min
+          max
+        }
+      },
+      ... on Anuncio {
+        titulo
+        areas_de_especialidad
+        costo{
+          min
+          max
+        }
+
+      },
+      ... on Vacante {
+        titulo
+        habilidades_req
+        prestaciones_beneficios
+      }
+    }
+  }
+  ---------------------------------
+  {
+    "input": {
+  		"informacion_personal": {
+        "nombre": {
+          "nombres": "Pacheco Chupame",
+          "apellidos": "Melap Utonio"
+        },
+        "nacimiento": "1989-12-01T05:00:00.000+00:00",
+        "genero": "masculino"
+      },
+      "negocio": {
+        "nombre": "Pies company",
+        "descripcion": "Vendo fotos de pies",
+        "anos_activos": 1
+      },
+      "areas_de_especialidad": ["Fotos de pie completo", "Fotos de talón", "Fotos de dedos raros"],
+      "costo": {
+        "min": 30000,
+        "max": 40000
+      },
+      "descripcion": "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+      "categorizaciones": [
+        {
+          "tipo": "categoria",
+          "nombre": "Marketing"
+      	},
+      	{
+          "tipo": "categoria",
+          "nombre": "Fotografía"
+        },
+      	{
+          "tipo": "sub-categoria",
+          "nombre": "Publicidad"
+        }],
+      "tags": [{
+        "nombre": "Pies",
+        "experiencia": 5
+      },
+      {
+        "nombre": "Fotografía Nocturna Astral",
+        "experiencia": 1
+      }],
+      "contacto": {
+        "telefonos": {
+          "fijo": "83000000",
+          "celular": "8110000000"
+        },
+        "redes_sociales": [{
+          "red": "faWhatsapp",
+          "url": "url@urlwhatsapp"
+        },
+        {
+          "red": "faTwitter",
+          "url": "url@urltwitter"
+        },
+        {
+          "red": "faLinkedin",
+          "url": "url@urllinkedin"
+        }]
+      },
+      "werker": {
+        "factura": true,
+        "ubicacion": {
+          "pais": "MX",
+          "estado": "NLE",
+          "ciudad": "MTY"
+        },
+        "objetos_werk": [{
+          "tipo": "anuncio",
+          "id": "600f9fa8015c570ab870f400"
+        },{
+          "tipo": "anuncio",
+          "id": "600f9fa4015c570ab870f3ff"
+        }]
+      },
+      "objeto_werk": {
+        "tipo": "freelance",
+        "esquemas": [1,2,3],
+        "capacidad": [1,2],
+        "estatus": {
+          "tipo": true
+        }
+      }
+    }
+  }
+  -Resolver creandoObjetoWerk*/

@@ -9,18 +9,19 @@ const categoriasArraySchema = new Schema({
 const tagsArraySchema = new Schema({
   _id: false,
   nombre: { type: String },
-  experiencia: { type: String },
+  // anos_activos { 1 => 'Menor a 1 año', 2 => 'Entre 1 y 3 años', 3 => 'Entre 3 a 5 años', 4 => 'Mayor a 5 años', 5 => 'Especialista Certificado' }
+  experiencia: { type: Number, enum: [1,2,3,4,5] },
 });
 
 const redesSocialesArraySchema = new Schema({
   _id: false,
-  red: { type: String },
+  red: { type: String, enum: ['faTwitter','faLinkedin','faWhatsapp','faInstagram','faFacebookSquare'] },
   url: { type: String },
 });
 
 const objetosWerkArraySchema = new Schema({
   _id: false,
-  tipo: { type: String },
+  tipo: { type: String, enum:['anuncio'] },
   id: { type: String }
 });
 
@@ -46,11 +47,12 @@ const objetoWerkSchema = new Schema({
   negocio: {
     nombre: { type: String, default: undefined },
     descripcion: { type: String, default: undefined },
-    anos_activos: { type: String, default: undefined } //el tipo de valor es correcto para esta propiedad???
+    // anos_activos { 1 => 'Menor a 1 año', 2 => 'Entre 1 y 3 años', 3 => 'Entre 3 a 5 años', 4 => 'Mayor a 5 años' }
+    anos_activos: { type: Number, default: undefined, enum: [1, 2, 3, 4] } //el tipo de valor es correcto para esta propiedad???
   },
   categorizaciones: { type: [categoriasArraySchema], default: undefined},
   tags: { type: [tagsArraySchema], default: undefined},
-  areasDeEspecialidad: { type: [String], default: undefined },
+  areas_de_especialidad: { type: [String], default: undefined },
   portafolios: { type: [Schema.Types.ObjectId], ref: 'portafolio', default: undefined},
   contacto: {
     telefonos: {

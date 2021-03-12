@@ -2,7 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const redesSocialesArraySchema = new Schema({
   _id: false,
-  red: { type: String },
+  red: { type: String, enum: ['faTwitter','faLinkedin','faWhatsapp','faInstagram','faFacebookSquare'] },
   url: { type: String },
 });
 
@@ -42,7 +42,8 @@ const reclutadorSchema = new Schema({
   negocio: {
     nombre: { type: String, default: undefined },
     descripcion: { type: String, default: undefined },
-    anos_activos: { type: String, default: undefined},
+    // anos_activos { 1 => 'Por definir', 2 => 'Por definir', 3 => 'Por definir' }
+    anos_activos: { type: Number, default: undefined, enum: [1, 2, 3] }, //el tipo de valor es correcto para esta propiedad???
     telefono: { type: String, default: undefined},
     direccion: { type: String, default: undefined},
   },

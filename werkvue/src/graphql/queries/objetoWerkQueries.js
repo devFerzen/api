@@ -61,7 +61,7 @@ export const WERK_OBJECT_QUERY = gql `
           nacimiento
           genero
         }
-        areasDeEspecialidad
+        areas_de_especialidad
         negocio{
           nombre
           descripcion
@@ -128,7 +128,7 @@ export const WERK_OBJECT_QUERY = gql `
           min
           max
         }
-        areasDeEspecialidad
+        areas_de_especialidad
       },
 
       ... on VacanteResult {
