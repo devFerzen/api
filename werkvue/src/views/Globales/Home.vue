@@ -18,18 +18,6 @@
 </template>
 <style>
 
-  /*
-  * Este contenedor 100% tiene algun uso en otra componente?
-  .container {
-      max-width: 100% !important;
-  }*/
-
-  @media only screen and (max-width:576px) {
-    .offset-1 {
-        margin-left: auto !important;
-        margin-right: auto !important;
-    }
-  }
 </style>
 <script>
 

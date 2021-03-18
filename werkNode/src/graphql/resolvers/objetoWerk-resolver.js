@@ -65,11 +65,28 @@ module.exports = {
       try {
         const result = await new werkModels.ObjetoWerk(params.input).save();
 
-        if(params.input.objeto_werk.tipo === 'freelance'){
-          /*await werkModels.Usuario.update(
+        if(params.input.objeto_werk.tipo === 'anuncio'){
+            await werkModels.ObjetoWerk.update(
+              {_id: "600f9a07144b8d7534e6629b"},
+              {
+                "$push": {
+                  "werker.objetos_werk": {
+                    "tipo": result.__typename,
+                    "id": result.id
+                  }
+                }
+              }
+            );
+        } else if(params.input.objeto_werk.tipo === 'freelance'){
+          await werkModels.Usuario.update(
               { _id: "6002706a8343ff508c0316d3" },
-                { "$set": { "werker.id": result.id } });*/
+                { "$set": { "werker.id": result.id } });
+        } else if(params.input.objeto_werk.tipo === 'vacante'){
+          await werkModels.Usuario.update(
+              { _id: "6002706a8343ff508c0316d3" },
+                { "$push": { "vacantes": result.id } });
         }
+        //console.dir(result);
         return result;
       } catch (e) {
         throw new Error(e);
@@ -87,46 +104,120 @@ module.exports = {
       }
       return answer;
     },
-    //omitUndefined=false para quitar campos cuando esten vacioes
     async actualizandoObjetoWerk(_, { params }, { werkModels }){
-      const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
-        {_id: params.id},
+
+      //Validacion deque si es el creador, o un agente de werk.
+
+      try {
+        const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
+          {_id: params.id},
           params.input,
-            null,
-              function(err, doc){
-                if(err){
-                  console.log("pendiente esquema de errors <<< ActualizandoPortafolioError");
-                }else{
-                  console.log("Update exitoso");
-                }
+          null
+        );
+
+        return actualizandoObjetoWerk;
+      } catch (e) {
+        console.dir(e);
+        throw new Error('Error en al creación');
+      }
+    },
+    async activarDesactivarObjetoWerk(_, { params }, { werkModels }){
+        //Validacion deque si es el creador, o un agente de werk.
+
+        try {
+          const actualizandoObjetoWerk = await werkModels.ObjetoWerk.update(
+            {_id: params.id},
+            {
+              "$set": {
+                "objeto_werk.estatus.tipo": params.input.objeto_werk.estatus.tipo
               }
-      );
-      return actualizandoObjetoWerk;
+            },
+          );
+
+          /*Nota para Test
+            AFSS - Se hizo pruebas y la función de abajo no tronará el servidor si
+            llegasé a fallar, como quiera se le integrá un callback errOnly para
+            registrar el error, Pendiente hacerlo y borrar esta nora
+            Funcion: De registro administrativo de acciones activacion de objetos werk
+            Pendiente: Su tabla según yo será con el pattron Bucket, hacer las modificaciones
+            necesarias para que guarde la informacion a como la necesita
+          werkModels.ReporteActivaciones.update(
+            {_id: params.id},
+            {
+              "$set": {
+                "objeto_werk.estatus.tipo": params.id
+              }
+            },
+            null,
+            (err) => {
+              if(err){
+                console.log(err);
+                // AFSS - validacion de error Pendiente***
+              }
+            }
+          );
+          */
+
+          return actualizandoObjetoWerk.ok;
+        } catch (e) {
+          console.dir(e);
+          /*  AFSS- Pendiete pasar errores bien definidos hacia el cliente dependiendo
+          del tipo de error y este estará directamente en la creación del schema
+          */
+          throw new Error('Error en al creación');
+        }
+
     },
-    async bloqDesbloqObjetoWerk(_, { id, input }, { werkModels }){
-      //Verificar usuario
+    async accionesPostulantes(_, { params, accion, idVacante }, { werkModels }){
 
-      let answer;
-      let queryAplicado = { _id: id };
-      let updateValues = input
+      let dataToUpdate;
+      let queryAplicado = { _id: idVacante };
 
-      const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
-        queryAplicado, updateValues, { omitUndefined: true }, function(err, modification){
-                if(err){
-                  //Hacer los logs
-                  console.log("err>>>",err);
-                  answer = "fallido";
-                } else {
-                  //Mandar asyncronicamente funcion a salvar a administración
-                  console.log("actualizado exitoso");
-                  answer = "éxito";
-                }
-              });
-     return answer;
-              //Pendiente el regreso de llamada en graphql
-              //investigación de llamado de returno graphql
+      switch (accion) {
+        case 'crear':
+          dataToUpdate = {
+            $addToSet: {
+              postulantes: params
+            }
+          };
+          break;
+        case 'actualizar':
+          queryAplicado.postulantes = {
+            "$elemMatch": {
+              "id": params.id
+            }
+          };
+          dataToUpdate = {
+            "$set": {
+
+            }
+          };
+          break;
+        case 'eliminar':
+          dataToUpdate = {
+            $pull: {
+              postulantes: { id: params.id }
+            }
+          };
+          break;
+        default:
+          throw new Error('Accion no especificada');
+      }
+
+      try {
+        const actualizandoObjetoWerk = await werkModels.ObjetoWerk.update(
+          queryAplicado, dataToUpdate
+        );
+
+        return actualizandoObjetoWerk.ok;
+      } catch (e) {
+        console.dir(e);
+        /*  AFSS- Pendiete pasar errores bien definidos hacia el cliente dependiendo
+        del tipo de error y este estará directamente en la creación del schema
+        */
+        throw new Error('Error en al creación');
+      }
     },
-
     // AFSS - Funcion de reportar un objeto werk, hay que transformarla en algo global
     async reportObjetoWerk(_, { id, razon, descripcion }, { werkModels }){
       let answer;

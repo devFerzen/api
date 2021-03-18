@@ -25,6 +25,15 @@ const objetosWerkArraySchema = new Schema({
   id: { type: String }
 });
 
+const postulanteArraySchema = new Schema({
+  _id: false,
+  nombres: {
+    nombres: { type: String },
+    apellidos: { type: String }
+  },
+  id: { type: String }
+});
+
 let correoRegexp = /.+\@.+\..+/;
 
 const objetoWerkSchema = new Schema({
@@ -84,7 +93,10 @@ const objetoWerkSchema = new Schema({
     // capacidad { 1 => 'En oficinas de forma presencial ', 2 => 'Home Office - 100% Virtual', 3 => 'Flex (Home Office y Oficina)' }
     capacidad: [{ type: Number, enum: [1, 2, 3] }],
     estatus: {
-      tipo: { type: Boolean, default: false },
+      tipo: {
+        type: Boolean,
+        default: false
+      },
       razon: String,
       descripcion: String,
       hardBane: Boolean
@@ -103,6 +115,7 @@ const objetoWerkSchema = new Schema({
     likes: { type: Number, default: 0 },
     vistas: { type: Number, default: 0 }
   },
+  postulantes: { type: [postulanteArraySchema], default: undefined },
   schema_version: { type: Number }
 },
   { timestamps: true }

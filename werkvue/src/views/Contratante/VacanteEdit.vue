@@ -8,9 +8,9 @@
               id="inputGroupTitulo">
               <b-form-input
                 id="vacanteTitulo"
-                v-model="vacante.titulo"
+                v-model="VacanteInfo.titulo"
                 required
-                placeholder="TECLEA EL TÍTULO DE TU VACANTE..."
+                placeholder="TECLEA EL TÍTULO DE TU VACANTE"
                 class="edit-inputs werk-shadow-input"
               ></b-form-input>
             </b-form-group><!--titulo-->
@@ -31,7 +31,7 @@
             label-for="vacanteSobre">
             <b-form-input
               id="vacanteSobre"
-              v-model="vacante.descripcion"
+              v-model="VacanteInfo.descripcion"
               required
               placeholder="Teclea aquí"
               class="edit-inputs werk-shadow-input"
@@ -44,7 +44,7 @@
             label-for="vacanteCategoria">
             <b-form-input
               id="vacanteCategoria"
-              v-model="vacante.categoria"
+              v-model="VacanteInfo.categoria"
               required
               placeholder="Teclea aquí"
               class="edit-inputs werk-shadow-input">
@@ -57,7 +57,7 @@
             label-for="anuncioSubCategoria">
             <b-form-input
               id="anuncioSubCategoria"
-              v-model="vacante.subCategoria"
+              v-model="VacanteInfo.subCategoria"
               required
               placeholder="Teclea aquí"
               class="edit-inputs werk-shadow-input">
@@ -70,7 +70,7 @@
             label-for="vacanteHabilidades">
             <b-form-input
               id="vacanteHabilidades"
-              v-model="vacante.habilidades"
+              v-model="VacanteInfo.habilidades"
               required
               placeholder="Teclea aquí"
               class="edit-inputs werk-shadow-input"
@@ -83,7 +83,7 @@
             label-for="vacantePrestacionBeneficio">
             <b-form-input
               id="vacantePrestacionBeneficio"
-              v-model="vacante.prestaciones"
+              v-model="VacanteInfo.prestaciones"
               required
               placeholder="Teclea aquí"
               class="edit-inputs werk-shadow-input"
@@ -104,7 +104,7 @@
                     style="margin-right: 8px;">
                     <b-form-input
                       id="vacanteRangoMin"
-                      v-model="vacante.rangoMin"
+                      v-model="VacanteInfo.rangoMin"
                       required
                       placeholder="Teclea aquí"
                       class="edit-inputs werk-shadow-input">
@@ -120,7 +120,7 @@
                     style="margin-left: 8px;">
                     <b-form-input
                       id="vacanteRangoMax"
-                      v-model="vacante.rangoMax"
+                      v-model="VacanteInfo.rangoMax"
                       required
                       placeholder="Teclea aquí"
                       class="edit-inputs werk-shadow-input">
@@ -137,7 +137,7 @@
                 label-for="vacanteModalidad">
                 <b-form-input
                   id="vacanteModalidad"
-                  v-model="vacante.modalidad"
+                  v-model="VacanteInfo.modalidad"
                   required
                   placeholder="Teclea aquí"
                   class="edit-inputs werk-shadow-input"
@@ -155,7 +155,7 @@
                     style="margin-right: 8px;">
                     <b-form-input
                       id="vacanteEstado"
-                      v-model="vacante.estado"
+                      v-model="VacanteInfo.estado"
                       required
                       placeholder="ESTADO"
                       class="edit-inputs werk-shadow-input"
@@ -170,7 +170,7 @@
                     style="margin-left: 8px;">
                     <b-form-input
                       id="vacanteCiudad"
-                      v-model="vacante.ciudad"
+                      v-model="VacanteInfo.ciudad"
                       required
                       placeholder="CIUDAD"
                       class="edit-inputs werk-shadow-input"
@@ -183,7 +183,7 @@
 
           <div class="tags-vacante">
             <h6 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">TAGS</h6>
-            <b-form-tags v-model="vacante.tags" no-outer-focus>
+            <b-form-tags v-model="VacanteInfo.tags" no-outer-focus>
               <template v-slot="{ tags, inputAttrs, inputHandlers, removeTag }">
                 <b-input-group class="mb-2 werk-shadow-input">
                   <input
@@ -272,26 +272,123 @@
 </template>
 
 <script>
+import { WERK_OBJECT_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
+import { WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+
 export default {
+  props:{
+    id: {
+      type: String,
+      default: '0'
+    }
+  },
   data() {
     return{
-      vacante:{
-        titulo: '',
-        descripcion: '',
-        categorias: [],
-        subcategorias: [],
-        habilidades: '',
-        prestaciones: '',
-        rangoMin: '',
-        rangoMax: '',
-        modalidad: '',
-        estado:'',
-        ciudad:'',
-        tags:['UX/UI', 'PHOTOSHOP']
+      VacanteInfo:{
+        titulo: 'Titulo de una vacante',
+        habilidades_req: ['Oración de habilidad requerida', 'Oración 2 de habilidad requerida'],
+        prestaciones_beneficios: ['Oración de prestaciones_beneficios requerida', 'Oración 2 de prestaciones_beneficios requerida'],
+        descripcion: "Vacante fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+        categorizaciones: [
+          {
+            tipo: "categoria",
+            nombre: "Marketing"
+          },
+          {
+            tipo: "categoria",
+            nombre: "Fotografía"
+          },
+          {
+            tipo: "sub-categoria",
+            nombre: "Publicidad"
+          }],
+        tags: [
+          {
+          nombre: "Pies",
+          experiencia: 5
+          },
+          {
+            nombre: "Fotografía Nocturna Astral",
+            experiencia: 1
+          }
+        ],
+        contacto: {
+          telefonos: {
+            fijo: "83000000",
+            celular: "8110000000"
+          },
+          redes_sociales: [{
+            red: "faWhatsapp",
+            url: "url@urlwhatsapp"
+          },
+          {
+            red: "faTwitter",
+            url: "url@urltwitter"
+          },
+          {
+            red: "faLinkedin",
+            url: "url@urllinkedin"
+          }]
+        },
+        werker: {
+          nombre: {
+            nombres: "Puto el que",
+            apellidos: "Lolea Utop"
+          },
+          ubicacion: {
+            pais: "MX",
+            estado: "NLE",
+            ciudad: "MTY"
+          },
+        },
+        objeto_werk: {
+          tipo: 'vacante',
+          esquemas: [1,2,3],
+          capacidad: [1,2],
+          estatus: {
+            tipo: true // AFSS - este debe que ser marcado ya sea en el validador del front o back
+          }
+        }
       }
     }
   },
+  methods: {
+    vacanteSaveUpdate(){
+      let params = {};
+      params.input = this.VacanteInfo;
 
+      if (this.id !== '0') {
+        params.id = this.id;
+      }
+
+      const mutateAnswer = this.$apollo.mutate({
+        mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
+        variable: {
+          params
+        }
+      });
+    },
+    getVancanteInfo: async(params) => {
+      if (params.id === '0'){
+        return;
+      }
+
+      const getQueryResult = await this.$apollo.query({
+        query: WERK_OBJECT_QUERY,
+        variables: {
+          params
+        }
+      });
+      console.dir(getQueryResult);
+      this.VacanteInfo = getQueryResult;
+    }
+  },
+  async created(){
+    let params = {};
+    params.id = this.id;
+
+    await this.getVancanteInfo(params);
+  },
   watch: {
     //Aquí estará el watch para mandar a cambiar la información del componente
     //ya que no se renderiza el componente ni vuelve a pasar por los hook cycles
@@ -446,5 +543,4 @@ export default {
     color: #379683;
     background-color: #5CD895;
   }
-
 </style>

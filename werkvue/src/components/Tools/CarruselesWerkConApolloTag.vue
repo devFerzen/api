@@ -13,7 +13,7 @@
            <hooper :settings="hooperSettings" >
              <!--<slide v-for="anuncio in data.anuncios" :key="anuncio._id" >
                <cards v-bind:objetoWerk="anuncio"> </cards>
-             </slide>-->
+             </slide>
              <slide>
                <cards></cards>
              </slide>
@@ -107,7 +107,7 @@
 import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper'
 import 'hooper/dist/hooper.css';
 
-import cards from '@/components/Freelancer/AnuncioCard.vue';
+//import cards from '@/components/Freelancer/AnuncioCard.vue';
 import gql from "graphql-tag";
 
 export default {

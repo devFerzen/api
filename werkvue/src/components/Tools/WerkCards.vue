@@ -129,7 +129,10 @@
   import { Hooper, Slide, Navigation as HooperNavigation, Pagination as HooperPagination } from 'hooper'
   import 'hooper/dist/hooper.css';
 
+  import ObjetoWerkActions from '../../actions/objetoWerk.js';
+
   export default {
+    mixins: [ObjetoWerkActions],
     components: {
       Hooper,
       Slide,
@@ -140,8 +143,22 @@
       objetoWerk: Object,
       werkUser: Boolean,
     },
-    created() {
-      //console.dir(this.objetoWerk);
+    data() {
+      return{
+        
+      }
+    },
+    mounted(){
+      //this.estatusAction();
+      /*let userData = {
+        id: "pepitoId",
+        nombres: {
+          nombres: "Raton Ratoncillo",
+          apellidos: "Vuela Vuela"
+        }
+      };
+
+      this.reclutadorAction(userData, 'eliminar', "600f9a07144b8d7534e6629b");*/
     }
   }
 </script>

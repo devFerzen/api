@@ -210,6 +210,7 @@ export const WERK_OBJECT_QUERY = gql `
 export const WERK_OBJECT_LIST_QUERY = gql `
   query qObjectWerk($params_query: paramsQueryInput!){
     qObjectWerk(params_query: $params_query){
+      __typename
       id
       descripcion
       objeto_werk{

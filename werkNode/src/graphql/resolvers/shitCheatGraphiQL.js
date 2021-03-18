@@ -210,8 +210,11 @@
 
   //*****ObjetoWerk
   /*
-  mutation creandoObjetoWerk($input: ObjWerkInput!){
-    creandoObjetoWerk(input: $input){
+
+mutation creandoObjetoWerk($params: ParamsObjetoWerkInput!){
+    creandoObjetoWerk(params:$params){
+    	__typename
+      id
       descripcion,
       categorizaciones{
           tipo
@@ -311,10 +314,6 @@
         "anos_activos": 1
       },
       "areas_de_especialidad": ["Fotos de pie completo", "Fotos de talón", "Fotos de dedos raros"],
-      "costo": {
-        "min": 30000,
-        "max": 40000
-      },
       "descripcion": "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
       "categorizaciones": [
         {
@@ -380,4 +379,83 @@
       }
     }
   }
-  -Resolver creandoObjetoWerk*/
+  -Resolver creandoObjetoWerk - freelance*/
+
+  /*
+    ---------------------------------
+    {
+      "params": {
+        "input": {
+          "titulo": "Anuncio de pieses 4",
+          "costo": {
+            "min": 18000,
+            "max": 15000
+          },
+          "areas_de_especialidad": [
+            "Fotos de pie completo de Padre",
+            "Fotos de talón de huerfanos",
+            "Fotos de dedos raros de huerfanos"
+          ],
+          "descripcion": "Soy Anuncio de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+          "categorizaciones": [
+            {
+              "tipo": "categoria",
+              "nombre": "Fotografía"
+            }
+          ],
+          "tags": [
+            {
+              "nombre": "Pies",
+              "experiencia": 2
+            }
+          ],
+          "contacto": {
+            "telefonos": {
+              "fijo": "83000000",
+              "celular": "8110000000"
+            },
+            "redes_sociales": [
+              {
+                "red": "faWhatsapp",
+                "url": "url@urlwhatsapp"
+              },
+              {
+                "red": "faTwitter",
+                "url": "url@urltwitter"
+              },
+              {
+                "red": "faLinkedin",
+                "url": "url@urllinkedin"
+              }
+            ]
+          },
+          "werker": {
+            "id": "6002706a8343ff508c0316d3",
+            "nombre": {
+              "nombres": "Puto el que",
+              "apellidos": "Lolea Utop"
+            },
+            "factura": true,
+            "ubicacion": {
+              "pais": "MX",
+              "estado": "NLE",
+              "ciudad": "MTY"
+            }
+          },
+          "objeto_werk": {
+            "tipo": "anuncio",
+            "esquemas": [
+              1,
+              2
+            ],
+            "capacidad": [
+              1
+            ],
+            "estatus": {
+              "tipo": true
+            }
+          }
+        }
+      }
+    }
+  -Resolver creandoObjetoWerk - anuncio*/

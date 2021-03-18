@@ -1,8 +1,9 @@
 import gql from 'graphql-tag';
 
 export const WERKOBJECT_NEW_MUTATE = gql  `
-  mutation creandoObjetoWerk($params: ParamsObjetoWerkInput!){
-    creandoObjetoWerk(params: $params){
+  mutation creandoObjetoWerk( $params: ParamsObjetoWerkInput! ){
+    creandoObjetoWerk( params: $params ){
+      __typename
       id,
       descripcion,
       categorizaciones{
@@ -90,8 +91,9 @@ export const WERKOBJECT_NEW_MUTATE = gql  `
 `;
 
 export const WERKOBJECT_UPDATE_MUTATE = gql `
-  mutation actualizandoObjetoWerk($params: ParamsObjetoWerkInput!){
-    actualizandoObjetoWerk(params: $params){
+  mutation actualizandoObjetoWerk( $params: ParamsObjetoWerkInput! ){
+    actualizandoObjetoWerk( params: $params ){
+      __typename
       descripcion,
       categorizaciones{
           tipo
@@ -173,5 +175,17 @@ export const WERKOBJECT_UPDATE_MUTATE = gql `
         prestaciones_beneficios
       }
     }
+  }
+`;
+
+export const WERKOBJECT_ESTATUS = gql `
+  mutation activarDesactivarObjetoWerk( $params: ParamsObjetoWerkInput! ){
+    activarDesactivarObjetoWerk( params: $params )
+  }
+`;
+
+export const WERKOBJECT_POSTULANTES = gql `
+  mutation accionesPostulantes( $params: ParamsPostulantesInput!, $accion: String!, $idVacante: String! ){
+    accionesPostulantes( params: $params, accion: $accion, idVacante: $idVacante )
   }
 `;

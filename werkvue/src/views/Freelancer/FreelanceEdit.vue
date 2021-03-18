@@ -22,7 +22,7 @@
                 class="werk-label">
                 <b-form-textarea
                   id="freelanceDescripcion"
-                  v-model="freelance.descripcion"
+                  v-model="FreelanceInfo.descripcion"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -48,7 +48,7 @@
                 class="werk-label">
                 <b-form-input
                   id="freelanceNombre"
-                  v-model="freelance.informacion_personal.nombre.nombres"
+                  v-model="FreelanceInfo.informacion_personal.nombre.nombres"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -66,7 +66,7 @@
                 class="werk-label">
                 <b-form-input
                   id="freelanceApellidos"
-                  v-model="freelance.informacion_personal.nombre.apellidos"
+                  v-model="FreelanceInfo.informacion_personal.nombre.apellidos"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -118,7 +118,7 @@
                 class="werk-label">
                 <b-form-select
                   id="freelanceGenero"
-                  v-model="freelance.informacion_personal.genero"
+                  v-model="FreelanceInfo.informacion_personal.genero"
                   required
                   class="werk-input werk-shadow-input"
                   :options="generoOptions"
@@ -133,7 +133,7 @@
               <b-form-group>
                 <b-form-select
                   id="freelanceEstado"
-                  v-model="freelance.werker.ubicacion.estado"
+                  v-model="FreelanceInfo.werker.ubicacion.estado"
                   class="werk-input werk-shadow-input"
                   :options="estadoOptions"
                 ></b-form-select>
@@ -143,7 +143,7 @@
               <b-form-group>
                 <b-form-select
                   id="freelanceEstado"
-                  v-model="freelance.werker.ubicacion.ciudad"
+                  v-model="FreelanceInfo.werker.ubicacion.ciudad"
                   required
                   class="werk-input werk-shadow-input"
                   :options="ciudadOptions"
@@ -166,7 +166,7 @@
                   class="werk-label">
                   <b-form-input
                     id="freelanceTelFijo"
-                    v-model="freelance.contacto.telefonos.fijo"
+                    v-model="FreelanceInfo.contacto.telefonos.fijo"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -184,7 +184,7 @@
                   class="werk-label">
                   <b-form-input
                     id="freelanceCorreo"
-                    v-model="freelance.contacto.correo"
+                    v-model="FreelanceInfo.contacto.correo"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -202,7 +202,7 @@
                   class="werk-label">
                   <b-form-input
                     id="freelanceCelular"
-                    v-model="freelance.contacto.telefonos.celular"
+                    v-model="FreelanceInfo.contacto.telefonos.celular"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -224,7 +224,7 @@
                   class="werk-label">
                   <b-form-input
                     id="freelanceWeb"
-                    v-model="freelance.contacto.url"
+                    v-model="FreelanceInfo.contacto.url"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -312,7 +312,7 @@
         <div class="habilidades-datosNegocio float-lg-left">
           <div class="habilidades freelance-edit-seccion">
             <h5 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">TAGS</h5>
-            <b-form-tags v-model="freelance.tags.nombre">
+            <b-form-tags v-model="FreelanceInfo.tags.nombre">
               <template v-slot="{ inputAttrs, inputHandlers }">
                 <b-input-group aria-controls="tags-list">
                   <b-form-input
@@ -338,7 +338,7 @@
                 <span style="font-size: 10px; color: #a5a5a5;">TAGS:</span>
                 <ul id="tags-list" class="list-unstyled d-inline-flex flex-wrap mb-0 mt-1">
                   <b-badge
-                    v-for="(werkTag, index) in freelance.tags"
+                    v-for="(werkTag, index) in FreelanceInfo.tags"
                     :key="index"
                     tag="li"
                     class="mx-1 my-1 werk-tags"
@@ -361,7 +361,7 @@
                 class="werk-label">
                   <b-form-input
                   id="freelanceDTNombre"
-                  v-model="freelance.negocio.nombre"
+                  v-model="FreelanceInfo.negocio.nombre"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -379,7 +379,7 @@
                 class="werk-label">
                   <b-form-input
                   id="freelanceDTAnos"
-                  v-model="freelance.negocio.anos_activos"
+                  v-model="FreelanceInfo.negocio.anos_activos"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -397,7 +397,7 @@
                 class="werk-label">
                   <b-form-input
                   id="freelanceDTDescripcion"
-                  v-model="freelance.negocio.descripcion"
+                  v-model="FreelanceInfo.negocio.descripcion"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -416,7 +416,7 @@
               <lable class="edit-label-checkbox">¿GENERAS FACTURAS?</lable>
             </b-col>
             <b-col>
-              <b-form-checkbox class="edit-input-checkbox" v-model="freelance.werker.factura" switch size="lg"></b-form-checkbox>
+              <b-form-checkbox class="edit-input-checkbox" v-model="FreelanceInfo.werker.factura" switch size="lg"></b-form-checkbox>
             </b-col>
           </b-row>
 
@@ -427,7 +427,7 @@
               <p>DIRECCIÓN COMPLETA...</p>
             </b-col>
             <b-col style="display: flex; justify-content: flex-end;" cols="3" align-self="center">
-              <b-form-checkbox class="edit-input-checkbox" v-model="freelance.factura" switch size="lg"></b-form-checkbox>
+              <b-form-checkbox class="edit-input-checkbox" v-model="FreelanceInfo.factura" switch size="lg"></b-form-checkbox>
               <font-awesome-icon :icon="['fab', 'twitter']" class="facturacion-acciones-icons" />
               <font-awesome-icon :icon="['fab', 'twitter']" class="facturacion-acciones-icons" />
             </b-col>
@@ -588,85 +588,85 @@
         type: String,
         default: '0'
       }
-    }
+    },
     data() {
       return {
-        freelance: {
-          "informacion_personal": {
-            "nombre": {
-              "nombres": "Pacheco Chupame",
-              "apellidos": "Melap Utonio"
+        FreelanceInfo: {
+          informacion_personal: {
+            nombre: {
+              nombres: "Pacheco Chupame",
+              apellidos: "Melap Utonio"
             },
-            "nacimiento": "1989-12-01T05:00:00.000+00:00",
-            "genero": "masculino"
+            nacimiento: "1989-12-01T05:00:00.000+00:00",
+            genero: "masculino"
           },
-          "negocio": {
-            "nombre": "Pies company",
-            "descripcion": "Vendo fotos de pies",
-            "anos_activos": 1
+          negocio: {
+            nombre: "Pies company",
+            descripcion: "Vendo fotos de pies",
+            anos_activos: 1
           },
-          "areas_de_especialidad": ["Fotos de pie completo", "Fotos de talón", "Fotos de dedos raros"],
-          "descripcion": "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
-          "categorizaciones": [
+          areas_de_especialidad: ["Fotos de pie completo", "Fotos de talón", "Fotos de dedos raros"],
+          descripcion: "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+          categorizaciones: [
             {
-              "tipo": "categoria",
-              "nombre": "Marketing"
+              tipo: "categoria",
+              nombre: "Marketing"
           	},
           	{
-              "tipo": "categoria",
-              "nombre": "Fotografía"
+              tipo: "categoria",
+              nombre: "Fotografía"
             },
           	{
-              "tipo": "sub-categoria",
-              "nombre": "Publicidad"
+              tipo: "sub-categoria",
+              nombre: "Publicidad"
             }],
-          "tags": [{
-            "nombre": "Pies",
-            "experiencia": 5
+          tags: [{
+            nombre: "Pies",
+            experiencia: 5
           },
           {
-            "nombre": "Fotografía Nocturna Astral",
-            "experiencia": 1
+            nombre: "Fotografía Nocturna Astral",
+            experiencia: 1
           }],
-          "contacto": {
-            "telefonos": {
+          contacto: {
+            telefonos: {
               "fijo": "83000000",
               "celular": "8110000000"
             },
             "redes_sociales": [{
-              "red": "faWhatsapp",
-              "url": "url@urlwhatsapp"
+              red: "faWhatsapp",
+              url: "url@urlwhatsapp"
             },
             {
-              "red": "faTwitter",
-              "url": "url@urltwitter"
+              red: "faTwitter",
+              url: "url@urltwitter"
             },
             {
-              "red": "faLinkedin",
-              "url": "url@urllinkedin"
+              red: "faLinkedin",
+              url: "url@urllinkedin"
             }]
           },
-          "werker": {
-            "factura": true,
-            "ubicacion": {
-              "pais": "MX",
-              "estado": "NLE",
-              "ciudad": "MTY"
+          werker: {
+            factura: true,
+            ubicacion: {
+              pais: "MX",
+              estado: "NLE",
+              ciudad: "MTY"
             },
-            "objetos_werk": [{
-              "tipo": "anuncio",
-              "id": "600f9fa8015c570ab870f400"
+            objetos_werk: [{
+              tipo: "anuncio",
+              id: "600f9fa8015c570ab870f400"
             },{
-              "tipo": "anuncio",
-              "id": "600f9fa4015c570ab870f3ff"
+              tipo: "anuncio",
+              id: "600f9fa4015c570ab870f3ff"
             }]
           },
-          "objeto_werk": {
-            "tipo": "freelance",
-            "esquemas": [1,2,3],
-            "capacidad": [1,2],
-            "estatus": {
-              "tipo": true
+          objeto_werk: {
+            tipo: "freelance",
+            esquemas: [1,2,3],
+            capacidad: [1,2],
+            estatus: {
+              tipo: true
             }
           }
         },
@@ -771,19 +771,32 @@
         /*if (valor.arraySeleccion == '0') {
           return;
         }*/
-        this.freelance.tags.push({nombre: valor.werkTagNombre, exp: valor.werkTagExp});
+        this.FreelanceInfo.tags.push({nombre: valor.werkTagNombre, exp: valor.werkTagExp});
+      },
+      getFreelanceinfo: async(params) => {
+        if (params.id === '0') {
+          return;
+        }
+
+        const gqlQueryResult = await this.$apollo.query({
+          query: WERK_OBJECT_QUERY,
+          variables: {
+            params
+          }
+        });
+        this.FreelanceInfo = gqlQueryResult;
       },
       objetoWerkSaveUpdate(){
         // AFSS - Pendiente Validación
         let params = {};
-        params.input = this.freelance;
+        params.input = this.FreelanceInfo;
 
-        if(this.id === '0'){
+        if(this.id !== '0'){
           params.id = this.id;
         }
 
         const answer = this.$apollo.mutate({
-          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE
+          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
           variables: {
             params
           }
@@ -791,8 +804,8 @@
         console.dir(answer);
       }
     },
-    created(){
-      //Select año and día autofill
+    async created(){
+      //AFSS - pasar a module para que se use globalmente Select año and día autofill
       for (var day = 1; day <= 31; day++) {
         this.diaOptions.push({ value: day , text: day});
       }
@@ -802,6 +815,10 @@
       for (var ano = actualYear; ano >= startYear; ano--) {
         this.anoOptions.push({ value: ano , text: ano});
       }
+
+      let params = {};
+      parms.id = this.id;
+      await this.getFreelanceinfo(params);
     }
   }
 </script>

@@ -85,21 +85,21 @@ module.exports = {
          };
          break;
        default:
+        //pendiente agregar error de poner la accion
      }
 
-     const addRemoveFav = await werkModels.Usuario.findByIdAndUpdate(
-       queryAplicado, updateValues, function(err, modification){
-         if(err){
-           //Hacer los logs
-           console.log("err>>>",err);
-           answer = "fallido";
-         } else {
-           //Mandar asyncronicamente funcion a salvar a administración
-           console.log("actualizado exitoso");
-           answer = "éxito";
-         }
-       });
-       return answer;
+     try {
+       const actualizandoUsuario = await werkModels.Usuario.update(
+         queryAplicado, updateValues
+         );
+         return actualizandoUsuario.ok;
+     } catch (e) {
+       console.dir(e);
+       /*  AFSS- Pendiete pasar errores bien definidos hacia el cliente dependiendo
+       del tipo de error y este estará directamente en la creación del schema
+       */
+       throw new Error('Error en al creación');
+     }
    },
     async addFavLike(_, { id, tipo, accion }, { werkModels }){
 

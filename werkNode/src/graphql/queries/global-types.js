@@ -57,12 +57,13 @@ const globalTypes = gql `
 
   input input_werker {
     id: String
-    tipo: String
-    empresa_id: String
     nombre: input_nombre
     factura: Boolean
     ubicacion: input_ubicacion
     objetos_werk: [input_objetos_werk]
+
+    tipo: String
+    empresa_id: String
   }
 
   type _objetos_werk {
@@ -253,6 +254,14 @@ const globalTypes = gql `
     anos_activos: Int
     telefono: String
     direccion: String
+  }
+
+  type  _postulantes {
+    nombres: _nombre
+  }
+
+  input  input_postulantes {
+    nombres: input_nombre
   }
 
   enum objetoWerkEnumTypes {

@@ -84,6 +84,7 @@ const objetoWerkType = gql `
     titulo: String
     habilidades_req: [String]
     prestaciones_beneficios: [String]
+    postulantes: _postulantes
   }
 
   type VacanteResult {
@@ -99,6 +100,7 @@ const objetoWerkType = gql `
     titulo: String
     habilidades_req: [String]
     prestaciones_beneficios: [String]
+    postulantes: _postulantes
   }
 
   type PortafolioResult {
@@ -133,13 +135,19 @@ const objetoWerkType = gql `
     creandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
     actualizandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
     eliminandoObjetoWerk(id: String!): String
-    bloqDesbloqObjetoWerk(id: String!, input: BloqDesbloqInput!): String!
+    activarDesactivarObjetoWerk(params: ParamsObjetoWerkInput!): String!
+    accionesPostulantes( params: ParamsPostulantesInput!, accion: String!, idVacante: String! ): String!
     reportObjetoWerk(id: String!, razon: String!, descripcion: String ): String!
   }
 
   input ParamsObjetoWerkInput {
     id: String
     input: ObjWerkInput!
+  }
+
+  input ParamsPostulantesInput {
+    id: String,
+    nombres: input_nombre
   }
 
   input ObjWerkInput {
@@ -151,6 +159,7 @@ const objetoWerkType = gql `
 
     habilidades_req: [String]
     prestaciones_beneficios: [String]
+    postulantes: input_postulantes
     titulo: String
 
     costo: input_costo
@@ -163,6 +172,5 @@ const objetoWerkType = gql `
   }
 
 `;
-
 
 module.exports = objetoWerkType;

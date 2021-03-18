@@ -36,7 +36,7 @@
                 class="werk-label">
                 <b-form-input
                   id="contratanteNombre"
-                  v-model="contratanteInfo.informacion_personal.nombre.nombres"
+                  v-model="ContratanteInfo.informacion_personal.nombre.nombres"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -55,7 +55,7 @@
                 class="werk-label">
                 <b-form-input
                   id="contratanteApellidos"
-                  v-model="contratanteInfo.informacion_personal.nombre.apellidos"
+                  v-model="ContratanteInfo.informacion_personal.nombre.apellidos"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -109,7 +109,7 @@
                 class="werk-label">
                 <b-form-select
                   id="contratanteGenero"
-                  v-model="contratanteInfo.informacion_personal.genero"
+                  v-model="ContratanteInfo.informacion_personal.genero"
                   required
                   class="werk-input werk-shadow-input"
                   :options="generoOptions"
@@ -125,7 +125,7 @@
               <b-form-group>
                 <b-form-select
                   id="contratanteEstado"
-                  v-model="contratanteInfo.werker.ubicacion.estado"
+                  v-model="ContratanteInfo.werker.ubicacion.estado"
                   class="werk-input werk-shadow-input"
                   :options="estadoOptions"
                 ></b-form-select>
@@ -135,7 +135,7 @@
               <b-form-group>
                 <b-form-select
                   id="contratanteEstado"
-                  v-model="contratanteInfo.werker.ubicacion.ciudad"
+                  v-model="ContratanteInfo.werker.ubicacion.ciudad"
                   required
                   class="werk-input werk-shadow-input"
                   :options="ciudadOptions"
@@ -159,7 +159,7 @@
                   class="werk-label">
                   <b-form-input
                     id="contratanteTelFijo"
-                    v-model="contratanteInfo.contacto.telefonos.fijo"
+                    v-model="ContratanteInfo.contacto.telefonos.fijo"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -178,7 +178,7 @@
                   class="werk-label">
                   <b-form-input
                     id="contratanteCelular"
-                    v-model="contratanteInfo.contacto.telefonos.celular"
+                    v-model="ContratanteInfo.contacto.telefonos.celular"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -197,7 +197,7 @@
                   class="werk-label">
                   <b-form-input
                     id="contratanteCorreo"
-                    v-model="contratanteInfo.contacto.correo"
+                    v-model="ContratanteInfo.contacto.correo"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -220,7 +220,7 @@
                   class="werk-label">
                   <b-form-input
                     id="contratanteWeb"
-                    v-model="contratanteInfo.contacto.url"
+                    v-model="ContratanteInfo.contacto.url"
                     required
                     placeholder="TECLEA AQUÍ"
                     class="werk-input werk-shadow-input"
@@ -317,7 +317,7 @@
                 class="werk-label">
                   <b-form-input
                   id="contratanteDTNombre"
-                  v-model="contratanteInfo.negocio.nombre"
+                  v-model="ContratanteInfo.negocio.nombre"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -335,7 +335,7 @@
                 class="werk-label">
                   <b-form-input
                   id="contratanteDTAnos"
-                  v-model="contratanteInfo.negocio.anos_activos"
+                  v-model="ContratanteInfo.negocio.anos_activos"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -353,7 +353,7 @@
                 class="werk-label">
                   <b-form-input
                   id="contratanteDTDescripcion"
-                  v-model="contratanteInfo.negocio.descripcion"
+                  v-model="ContratanteInfo.negocio.descripcion"
                   required
                   placeholder="TECLEA AQUÍ"
                   class="werk-input werk-shadow-input"
@@ -372,7 +372,7 @@
               <lable class="edit-label-checkbox">¿GENERAS FACTURAS?</lable>
             </b-col>
             <b-col>
-              <b-form-checkbox class="edit-input-checkbox" v-model="contratanteInfo.werker.factura" switch size="lg"></b-form-checkbox>
+              <b-form-checkbox class="edit-input-checkbox" v-model="ContratanteInfo.werker.factura" switch size="lg"></b-form-checkbox>
             </b-col>
           </b-row>
         </div>
@@ -390,7 +390,7 @@
 <script>
 
 import { CONTRATANTE_INFO_QUERY } from '../../graphql/queries/contratanteQueries.js';
-import { CONTRATANTE_UPDATE_MUTATE } from '../../graphql/queries/contratanteQueries.js';
+import { CONTRATANTE_UPDATE_MUTATE } from '../../graphql/mutations/contratanteMutations.js';
 
 export default {
   props: {
@@ -402,53 +402,48 @@ export default {
   data() {
     return {
       gqlQueryResult: '',
-      contratanteInfo: {
+      ContratanteInfo: {
         informacion_personal: {
           nombre: {
-            nombres: 'Alan Ferzen',
-            apellidos: 'Secenas Siller'
+            nombres: "ALFREDO X",
+            apellidos: " - MEN"
           },
-          nacimiento: '1989-12-01T05:00:00.000+00:00',
-          genero: 'masculino',
+          nacimiento: "1989-12-01T05:00:00.000+00:00",
+          genero: "masculino"
         },
-        werker:{
-          empresa_id: '',
+        werker: {
           ubicacion: {
-            pais: 'MX',
-            ciudad: 'Ensenada',
-            estado: 'NLE'
+            estado: "Nuevo León",
+            ciudad: "Monterrey"
           }
         },
-        contacto:{
-          telefonos: {
-            fijo: '8300000',
-            celular: '8110000000'
-          },
-          url: 'wwww.alan.com',
-          correo: 'alan@alan.com',
-          redes_sociales: []
-        },
-
-        objeto_werk: {
-          tipo: 'contratante'
-        },
+        tipo_perfil: 1,
         negocio: {
-          nombre: 'ALAN ENTERPRAISE',
-          descripcion: 'HAHAHAHAHAHAHAHA',
-          anos_activos: 3
+          nombre: "El mas verga del mundo",
+          descripcion: "El negocio más verga del mundo",
+          anos_activos: "1",
+          telefono: "83000000",
+          direccion: "Abajo"
         },
-        categorizaciones: [
+        contacto: {
+          telefonos: {
+            fijo: "83000001",
+            celular: "8110000000"
+          },
+          url: "www.penes.com"
+        },
+        categorizaciones_interes: [
           {
-            "tipo": "categoria",
-            "nombre": "Finanzas"
+            tipo: "Categoría",
+            nombre: "Sexo"
           }
         ],
-        tags: [
+        tags_interes: [
           {
-            nombre:"hola",
-            experiencia:1
+            nombre: "Anal",
+            experiencia: 1
           }
-        ],
+        ]
       },
       redes_sociales: {
         facebook: '',
@@ -535,33 +530,41 @@ export default {
     contratanteSaveUpdate(){
 
       let params = {};
-      params.input = this.contratanteInfo;
+      params.input = this.ContratanteInfo;
 
-      if(this.id === '0'){
+      if(this.id !== '0'){
         params.id =  this.id;
       }
 
-      const answer = this.$apollo.mutate({
+      const mutateAnswer = this.$apollo.mutate({
         mutation: this.id === '0' ? CONTRATANTE_NEW_MUTATE : CONTRATANTE_UPDATE_MUTATE,
         variables: {
           params
         }
       });
-      console.dir(answer);
+      console.dir(mutateAnswer);
+    },
+     getContratanteInfo: async(params) =>{
+      if (params.id === '0') {
+        return;
+      }
+
+      const gqlQueryResult = await this.$apollo.query({
+          query: CONTRATANTE_INFO_QUERY,
+          variables: {
+            params
+          }
+        });
+      console.dir(gqlQueryResult);
+      this.ContratanteInfo = gqlQueryResult;
     }
   },
   async created(){
-    let params = this.id;
-    const this.gqlQueryResult = await this.$apollo.query({
-        query: CONTRATANTE_INFO_QUERY,
-        variables: {
-          params
-        }
-      });
-    console.dir(this.gqlQueryResult);
-    //this.contratanteInfo = this.gqlQueryResult;
-  }
+    let params = {};
+    parms.id = this.id;
 
+    await this.getContratanteInfo(params);
+  }
 
 }
 </script>

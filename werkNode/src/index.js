@@ -91,7 +91,8 @@ app.use(async (req, res, next) => {
 
     //refreshToken valido
     //Informacion extra para usuario werker - traer arreglo de favoritos y likes
-    req.userId = {
+
+    req.userLogged = {
       id: user._id,
       tipo: user.werker.tipo
     };
@@ -118,7 +119,7 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP((req, res) =>({
   context: {
     werkModels,
     res,
-    userId: req.userId,
+    userLogged: req.userLogged,
     SEGURO_AUTH_TOKEN,
     SEGURO_REFRESH_TOKEN,
     }

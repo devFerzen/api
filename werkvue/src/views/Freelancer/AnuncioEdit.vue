@@ -1,23 +1,7 @@
 <template>
   <b-container align="left" class="anuncio-edit" style="padding-bottom:20px; padding-top: 50px; overflow:hidden;">
-    <div class="pending-list">
-      <b-button v-b-toggle.list class="btn-pending-list">Lista de pendientes</b-button>
-      <b-collapse id="list">
-        <b-card>
-          <p><strong>FRONT-END:</strong></p>
-          <p><strong>1. --Inputs:</strong> dar estilos de los inputs, en especial el titulo</p>
-          <p><strong>2. --Icono delete:</strong> pendiente estilo y icono.</p>
-          <p><strong>3. --Categoría y sub:</strong> hacer el pensamiento de como el usuario visualizará esto ya que puede ser más de uno.</p>
-          <p><strong>4. --Reglas de Validación:</strong> pendiente.</p>
-          <p><strong>5. --Ajuntar imagen:</strong> crear el input para agregar imagenes y listado de imagenes ya existentes junto con sus acciones.</p>
-          <p><strong>6. --Portafolios:</strong> crear la vista de tarjeta edición de los portafolios.</p>
-        </b-card>
-      </b-collapse>
-    </div>
-
     <div style="clear:both;">
     </div>
-
     <b-form @submit="onSubmit" @reset="onReset">
       <div class="titulo">
         <b-row no-gutters>
@@ -26,7 +10,6 @@
               id="inputGroupTitulo">
               <b-form-input
                 id="anuncioTitulo"
-                v-model="anuncio.titulo"
                 required
                 placeholder="TECLEA EL TÍTULO DE TU ANUNCIO..."
                 class="edit-inputs"
@@ -50,7 +33,6 @@
             label-for="anuncioSobre">
             <b-form-input
               id="anuncioSobre"
-              v-model="anuncio.sobre"
               required
               placeholder="Teclea aquí"
               class="edit-inputs"
@@ -63,7 +45,6 @@
             label-for="anuncioCategoria">
             <b-form-input
               id="anuncioCategoria"
-              v-model="anuncio.categoria"
               required
               placeholder="Teclea aquí"
               class="edit-inputs">
@@ -76,7 +57,6 @@
             label-for="anuncioSubCategoria">
             <b-form-input
               id="anuncioSubCategoria"
-              v-model="anuncio.subCategoria"
               required
               placeholder="Teclea aquí"
               class="edit-inputs">
@@ -145,7 +125,6 @@
               label-for="anuncioAreaMinimo">
               <b-form-input
                 id="anuncioAreaMinimo"
-                v-model="anuncio.precioMinimo"
                 required
                 placeholder="Teclea aquí"
                 class="edit-inputs">
@@ -158,7 +137,6 @@
               label-for="anuncioAreaMaximo">
               <b-form-input
                 id="anuncioAreaMáximo"
-                v-model="anuncio.precioMáximo"
                 required
                 placeholder="Teclea aquí"
                 class="edit-inputs">
@@ -268,84 +246,186 @@
 </template>
 
 <script>
-import PortafolioCard from '@/components/Freelancer/PortfolioSmallCard.vue'
+  import PortafolioCard from '@/components/Freelancer/PortfolioSmallCard.vue'
 
-export default {
-  props: ['id'],
-  components: {
-    PortafolioCard,
-  },
-  computed: {
-    availableCategorias() {
-      return this.options.categorias.filter( opt => this.value.indexOf(opt) === -1 );
-    },
-  },
-  methods: {
-    resetInputValue() {
-        this.inputAreaEspecialidad = ''
-      },
-  },
-  data() {
-    return {
-      inputAreaEspecialidad: '',
-      inputSearchTag: '',
-      selectedSubCategoria: '',
-      selectedTag: '',
-      anuncio: {
-        sobre: '',
-        categorias: [
-          'A1', 'A2'
-        ],
-        subCategorias: [],
-        areasEspecialidad: ['Gogogogoggog!.'],
-        precioMinimo: '',
-        precioMáximo: '',
-        tags: []
-      },
-      options: {
-        categorias: [
-          'A1', 'A2'
-        ],
-        subCategorias: [
-          { value: 'A1', text: 'Opcion A1' },
-          { value: 'B1', text: 'Opcion B1' },
-        ],
-        tags: [
-          { value: 'T1', text: 'Opcion T1' },
-          { value: 'T2', text: 'Opcion T2' },
-        ]
+  import { WERK_OBJECT_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
+  import { WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+
+
+  export default {
+    props: {
+      id: {
+        type: String,
+        default: '0'
       }
-    }
-  },
-  beforeRouteLeave(to, from, next) {
-    /*const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
-    if (this.is_editing) {
-      next();
-    } else if (answer) {
-      next();
-    } else {
-      next(false);
-    }*/
-  },
-}
+    },
+    components: {
+      PortafolioCard,
+    },
+    data() {
+      return {
+        inputAreaEspecialidad: '',
+        inputSearchTag: '',
+        selectedSubCategoria: '',
+        selectedTag: '',
+        AnuncioInfo: {
+          titulo: '',
+          costo: {
+            min: 25000,
+            max: 35000
+          },
+          areas_de_especialidad: ["Fotos de pie completo de Padre", "Fotos de talón de huerfanos", "Fotos de dedos raros de huerfanos"],
+          descripcion: "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+          categorizaciones: [
+            {
+              tipo: "categoria",
+              nombre: "Marketing"
+          	},
+          	{
+              tipo: "categoria",
+              nombre: "Fotografía"
+            },
+          	{
+              tipo: "sub-categoria",
+              nombre: "Publicidad"
+            }],
+          tags: [{
+            nombre: "Pies",
+            experiencia: 5
+          },
+          {
+            nombre: "Fotografía Nocturna Astral",
+            experiencia: 1
+          }],
+          contacto: {
+            telefonos: {
+              fijo: "83000000",
+              celular: "8110000000"
+            },
+            redes_sociales: [{
+              red: "faWhatsapp",
+              url: "url@urlwhatsapp"
+            },
+            {
+              red: "faTwitter",
+              url: "url@urltwitter"
+            },
+            {
+              red: "faLinkedin",
+              url: "url@urllinkedin"
+            }]
+          },
+          werker: {
+            id: '6002706a8343ff508c0316d3',
+            nombre: {
+              nombres: "Puto el que",
+              apellidos: "Lolea Utop"
+            },
+            factura: false,
+            ubicacion: {
+              pais: "MX",
+              estado: "NLE",
+              ciudad: "MTY"
+            },
+          },
+          objeto_werk: {
+            tipo: 'anuncio',
+            esquemas: [1,2,3],
+            capacidad: [1,2],
+            estatus: {
+              tipo: true // AFSS - este debe que ser marcado ya sea en el validador del front o back
+            }
+          }
+        },
+        options: {
+          categorias: [
+            'A1', 'A2'
+          ],
+          subCategorias: [
+            { value: 'A1', text: 'Opcion A1' },
+            { value: 'B1', text: 'Opcion B1' },
+          ],
+          tags: [
+            { value: 'T1', text: 'Opcion T1' },
+            { value: 'T2', text: 'Opcion T2' },
+          ]
+        }
+      }
+    },
+    computed: {
+      availableCategorias() {
+        return this.options.categorias.filter( opt => this.value.indexOf(opt) === -1 );
+      },
+    },
+    methods: {
+      resetInputValue() {
+          this.inputAreaEspecialidad = ''
+        },
+      anuncioSaveUpdate(){
+        let params = {};
+        params.input = this.AnuncioInfo;
+
+        if (this.id !== '0') {
+          params.id = this.id;
+        }
+
+        const mutateAnswer = this.$apollo.mutate({
+          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
+          variable: {
+            params
+          }
+        });
+
+      },
+      getAnuncioInfo: async(params) => {
+        if (params.id === '0') {
+          return;
+        }
+
+        const getQueryResult = await this.$apollo.query({
+          query: WERK_OBJECT_QUERY,
+          variables: {
+            params
+          }
+        });
+        console.dir(getQueryResult);
+        this.AnuncioInfo = getQueryResult;
+      }
+    },
+    async created(){
+      let params = {};
+      params.id = this.id;
+      await this.getAnuncioInfo(params);
+    },
+    beforeRouteLeave(to, from, next) {
+      /*const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
+      if (this.is_editing) {
+        next();
+      } else if (answer) {
+        next();
+      } else {
+        next(false);
+      }*/
+    },
+  }
 </script>
 
 <style lang="css">
 
-.pending-list {
-  position: relative;
-  top: 80px;
-  z-index: 1;
-  float: left;
-  width: 350px;
-}
+  .pending-list {
+    position: relative;
+    top: 80px;
+    z-index: 1;
+    float: left;
+    width: 350px;
+  }
 
-.pending-list p {
-  text-align: left;
-  font-size: 9px;
-  font-family: sans-serif;
-  margin: 2px 0;
-}
+  .pending-list p {
+    text-align: left;
+    font-size: 9px;
+    font-family: sans-serif;
+    margin: 2px 0;
+  }
   .anuncio-edit h5{
     margin-left: -17px;
   }
@@ -508,28 +588,28 @@ export default {
       background-color: #8EE4AF !important;
   }
 
-/*RESPONSIVIDAD*/
-@media only screen and (max-width:992px){
-  .informacionGeneral-bandaPrecios{
-    width: 100%;
+  /*RESPONSIVIDAD*/
+  @media only screen and (max-width:992px){
+    .informacionGeneral-bandaPrecios{
+      width: 100%;
+    }
+
+    .imagenesProyectos-portafolios{
+      width: 100%;
+    }
+
+    .tags-informacionPersonal{
+      width: 100%;
+    }
+
+    .acciones-anuncio-edit{
+      width: 100%;
+      height: 120px;
+    }
   }
 
-  .imagenesProyectos-portafolios{
-    width: 100%;
-  }
 
-  .tags-informacionPersonal{
-    width: 100%;
-  }
-
-  .acciones-anuncio-edit{
-    width: 100%;
-    height: 120px;
-  }
-}
-
-
-/*TAGS*/
+  /*TAGS*/
   .b-form-tags {
       background-color: inherit;
       border: none;
@@ -550,5 +630,4 @@ export default {
     color: #379683;
     background-color: #5CD895;
   }
-
 </style>

@@ -40,7 +40,7 @@ module.exports = {
         );
         return contratanteActualizado;
       } catch (err) {
-        //console.dir(err);
+        console.dir(err);
         //Mandar a loggear este error - Pendiente
         throw new Error('Error al actualizar el perfil');
       }

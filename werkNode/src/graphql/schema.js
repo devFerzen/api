@@ -1,6 +1,5 @@
 import glob from 'glob';
 import { makeExecutableSchema, mergeTypeDefs, mergeResolvers } from 'graphql-tools';
-import { rootResolver } from './resolvers';
 
 import usuarioQueries from './queries/usuario-queries';
 import objetoWerkQueries from './queries/objetoWerk-queries';
