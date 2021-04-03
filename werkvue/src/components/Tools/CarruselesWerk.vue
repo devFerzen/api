@@ -115,7 +115,7 @@ export default {
            params_query
         }
       });
-     this.carruselData = this.gqlQueryResult.data.qObjectWerk;
+     this.carruselData = this.gqlQueryResult.data.qObjectWerkList;
   }
 }
 </script>

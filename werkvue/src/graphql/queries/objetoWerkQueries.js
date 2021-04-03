@@ -208,8 +208,8 @@ export const WERK_OBJECT_QUERY = gql `
 `;
 
 export const WERK_OBJECT_LIST_QUERY = gql `
-  query qObjectWerk($params_query: paramsQueryInput!){
-    qObjectWerk(params_query: $params_query){
+  query qObjectWerkList($params_query: paramsQueryInput!){
+    qObjectWerkList(params_query: $params_query){
       __typename
       id
       descripcion
@@ -244,8 +244,14 @@ export const WERK_OBJECT_LIST_QUERY = gql `
       },
       ... on Vacante {
         titulo
+        postulantes{
+          idPerfil
+          nombres{
+            nombres
+            apellidos
+          }
+        }
       }
     }
   }
-
-`
+`;

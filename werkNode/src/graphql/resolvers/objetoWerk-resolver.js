@@ -1,3 +1,6 @@
+/**
+ * @module resolvers/ObjetoWerk
+ */
 import bcrypt from 'bcryptjs';
 import crearTokens from '../../utilities/auth';
 import { GraphQLScalarType } from 'graphql';
@@ -52,7 +55,7 @@ module.exports = {
       const objectWerk = werkModels.ObjetoWerk.findById(args.params_query.id_list[0]);
       return objectWerk;
     },
-    qObjectWerk: (_, args, { werkModels }) => {
+    qObjectWerkList: (_, args, { werkModels }) => {
       const ids = args.params_query.id_list;
       //const objectWerkType = args.params_query.tipo_objeto;
       const objectWerkList = werkModels.ObjetoWerk.find({'_id':{$in: ids}});
@@ -61,27 +64,40 @@ module.exports = {
     }
   },
   Mutation: {
-    async creandoObjetoWerk(_,{ params }, { werkModels }){
-      try {
-        const result = await new werkModels.ObjetoWerk(params.input).save();
+    /**
+     * @typedef {Params} Object
+     * @property {String} id El identificador del objeto werk.
+     * @property {Object}  Objeto con información de un objeto werk.
+     */
 
-        if(params.input.objeto_werk.tipo === 'anuncio'){
+    /**
+     * @function creandoObjetoWerk
+     * @param {Object} _ Informacion de la llamada.
+     * @param {Params} Params Informacion de los inputs posibles.
+     * @param {Object} werkModels Todos los schemas de mongoose.
+     * @return {Object} ObjetoWerk Información de cualquier Objeto Werk.
+     */
+    async creandoObjetoWerk(_,{ Params }, { werkModels }){
+      try {
+        const result = await new werkModels.ObjetoWerk(Params.input).save();
+
+        if(Params.input.objeto_werk.tipo === 'anuncio'){
             await werkModels.ObjetoWerk.update(
               {_id: "600f9a07144b8d7534e6629b"},
               {
                 "$push": {
                   "werker.objetos_werk": {
-                    "tipo": result.__typename,
+                    "tipo": 'anuncio',
                     "id": result.id
                   }
                 }
               }
             );
-        } else if(params.input.objeto_werk.tipo === 'freelance'){
+        } else if(Params.input.objeto_werk.tipo === 'freelance'){
           await werkModels.Usuario.update(
               { _id: "6002706a8343ff508c0316d3" },
                 { "$set": { "werker.id": result.id } });
-        } else if(params.input.objeto_werk.tipo === 'vacante'){
+        } else if(Params.input.objeto_werk.tipo === 'vacante'){
           await werkModels.Usuario.update(
               { _id: "6002706a8343ff508c0316d3" },
                 { "$push": { "vacantes": result.id } });
@@ -104,14 +120,14 @@ module.exports = {
       }
       return answer;
     },
-    async actualizandoObjetoWerk(_, { params }, { werkModels }){
+    async actualizandoObjetoWerk(_, { Params }, { werkModels }){
 
       //Validacion deque si es el creador, o un agente de werk.
 
       try {
         const actualizandoObjetoWerk = await werkModels.ObjetoWerk.findByIdAndUpdate(
-          {_id: params.id},
-          params.input,
+          {_id: Params.id},
+          Params.input,
           null
         );
 
@@ -121,15 +137,20 @@ module.exports = {
         throw new Error('Error en al creación');
       }
     },
-    async activarDesactivarObjetoWerk(_, { params }, { werkModels }){
+
+    /**
+     * @function activarDesactivarObjetoWerk
+     * @params {Object}
+     */
+    async activarDesactivarObjetoWerk(_, { Params }, { werkModels }){
         //Validacion deque si es el creador, o un agente de werk.
 
         try {
           const actualizandoObjetoWerk = await werkModels.ObjetoWerk.update(
-            {_id: params.id},
+            {_id: Params.id},
             {
               "$set": {
-                "objeto_werk.estatus.tipo": params.input.objeto_werk.estatus.tipo
+                "objeto_werk.estatus.tipo": Params.input.objeto_werk.estatus.tipo
               }
             },
           );
@@ -141,11 +162,11 @@ module.exports = {
             Funcion: De registro administrativo de acciones activacion de objetos werk
             Pendiente: Su tabla según yo será con el pattron Bucket, hacer las modificaciones
             necesarias para que guarde la informacion a como la necesita
-          werkModels.ReporteActivaciones.update(
-            {_id: params.id},
+          werkModels.ReporteObjetosWerk.update(
+            {_id: Params.id},
             {
               "$set": {
-                "objeto_werk.estatus.tipo": params.id
+                "objeto_werk.estatus.tipo": Params.id
               }
             },
             null,
@@ -168,7 +189,15 @@ module.exports = {
         }
 
     },
-    async accionesPostulantes(_, { params, accion, idVacante }, { werkModels }){
+
+    /**
+     * @function accionesPostulantes
+     * @param {Params} Params Objeto del freelancer
+     * @param {String} accion Tipo de accion (crear - actualizar - eliminar)
+     * @param {String} idVacante Id de la vacante a postularse
+     * @return {String} 1 - 0
+     */
+    async accionesPostulantes(_, { Params, accion, idVacante }, { werkModels }){
 
       let dataToUpdate;
       let queryAplicado = { _id: idVacante };
@@ -176,15 +205,16 @@ module.exports = {
       switch (accion) {
         case 'crear':
           dataToUpdate = {
-            $addToSet: {
-              postulantes: params
+            "$addToSet": {
+              "postulantes": Params //No esta guardando
             }
           };
+          console.log(dataToUpdate, idVacante);
           break;
         case 'actualizar':
           queryAplicado.postulantes = {
             "$elemMatch": {
-              "id": params.id
+              "id": Params.id
             }
           };
           dataToUpdate = {
@@ -196,7 +226,9 @@ module.exports = {
         case 'eliminar':
           dataToUpdate = {
             $pull: {
-              postulantes: { id: params.id }
+              "postulantes" : {
+                idPerfil: Params.idPerfil
+              }
             }
           };
           break;
@@ -206,7 +238,8 @@ module.exports = {
 
       try {
         const actualizandoObjetoWerk = await werkModels.ObjetoWerk.update(
-          queryAplicado, dataToUpdate
+          queryAplicado,
+            dataToUpdate,
         );
 
         return actualizandoObjetoWerk.ok;
@@ -218,49 +251,150 @@ module.exports = {
         throw new Error('Error en al creación');
       }
     },
-    // AFSS - Funcion de reportar un objeto werk, hay que transformarla en algo global
-    async reportObjetoWerk(_, { id, razon, descripcion }, { werkModels }){
-      let answer;
-      let queryAplicado = { _id: userLogged };
 
-      //Funcion para saber los estados críticos o no.
-      if(razonesCriticas.indexOf(razon) != -1){
-        const applyhardBane = werkModels.ObjetoWerk.findByIdAndUpdate(
-          queryAplicado,
-            { estatus: {
-                tipo: false,
-                razon: razon,
-                descripcion: descripcion || undefined,
-                hardBane: true
-              }
-            },
-              function(err, modification){
-                if (err) {
-                  answer = "fallo";
-                } else {
-                  answer = "exito";
-                  // send notification
-                }
-              });
-      } else {
-        const applySoftBane = werkModels.ObjetoWerk.findByIdAndUpdate(
-          queryAplicado,
-            { estatus: {
-                razon: razon,
-                descripcion: descripcion || undefined
-              }
-            },
-              function(err, modification){
-                if (err) {
-                  answer = "fallo";
-                } else {
-                  answer = "exito";
-                }
-              });
+    /**
+     * @function creandoObjetoWerk
+     * @param {Params} Params Id y tipo del ObjetoWerk
+     * @param {Object} Estado Estado de respuesta completo
+     * @return {String} Respuesta del resolver Boolean
+     */
+    async reportObjetoWerk(_, { Params, Estado }, { werkModels }){
+      let estadoData = Estado;
+      let queryAplicado = { _id: id };
 
-        //async admin, schema Reports metods if succeed
-        return answer;
+      estadoData = {
+        tipo: Estado.tipo || true,
+        razon: Estado.razon || undefined,
+        descripcion: Estado.descripcion || undefined,
+        hardBane: Estado.hardBane || undefined,
+      };
+
+      if(razonesCriticas.indexOf(Estado.razon) != -1){
+        estadoData   = {
+          tipo: false,
+          razon: Estado.razon,
+          descripcion: Estado.descripcion || undefined,
+          hardBane: true,
+        };
       }
+
+      try {
+
+        const answer = await werkModels.ObjetoWerk.update (
+          queryAplicado,
+          {
+            "$set": {
+              "objeto_werk.estatus": estadoData
+            }
+          },
+          {omitUndefined:true}
+        );
+
+        //Save into reportes Report
+
+      } catch (e) {
+        throw new Error(e);
+      }
+
+      return answer.ok;
+    },
+
+    /**
+     * @function likingObjetoWerk
+     *
+     */
+    async likingObjetoWerk(_, { Params, action }, { werkModels } ){
+      let queryAplicado = { _id: Params.id_list[0] };
+      let dataToUpdate;
+
+      switch (action) {
+        case 'like':
+          dataToUpdate = {
+            "$inc": {
+              "objeto_werk.likes": 1
+            }
+          };
+          break;
+        case 'deslike':
+            dataToUpdate = {
+              "$inc": {
+                "objeto_werk.likes": -1
+              }
+            };
+            break;
+        default:
+        throw new Error('Acción sin especificar');
+      }
+
+      //Test activeUser passed by context
+      let idTest = "6002706a8343ff508c0316d3";
+
+
+      const updateUser = await werkModels.Usuario.updateOne(
+        { _id: idTest},
+        { "$addToSet": {
+          "obj_werk_like": {
+            "id": Params.id_list[0],
+            "tipo": Params.tipo_objeto
+          }
+        }}
+      );
+
+      if(updateUser.ok == 1){
+        await werkModels.ObjetoWerk.updateOne(
+          queryAplicado,
+            dataToUpdate
+        );
+      }
+      return updateUser.ok;
+    },
+
+    /**
+     * @function favoringObjetoWerk
+     * @param {Object} Params Contiene el id del Objeto y su tipo
+     * @param {Strgin} action La accion de agregarFavorito, quitarFavorito
+     */
+    async favoringObjetoWerk(_, { Params, action }, { werkModels }){
+      let queryAplicado = { _id: Params.id_list[0] };
+      let dataToUpdate;
+
+      switch (action) {
+        case "agregarFavorito":
+          dataToUpdate= {
+            "$inc": {
+              "objeto_werk.favs": 1
+            }
+          };
+          break;
+        case "quitarFavorito":
+          dataToUpdate = {
+            "$inc": {
+              "objeto_werk.favs": -1
+            }
+          };
+          break;
+        default:
+
+      }
+      let idTest = "6002706a8343ff508c0316d3";
+      const updateUser = await werkModels.Usuario.update(
+        { _id: idTest},
+        { "$addToSet": {
+          "obj_werk_fav": {
+            "id":Params.id_list[0],
+            "tipo":Params.tipo_objeto
+          }
+        }}
+      );
+
+      if(updateUser.ok == 1){
+        await werkModels.ObjetoWerk.updateOne(
+          queryAplicado,
+            dataToUpdate
+        );
+      }
+      return updateUser.ok;
     }
+
   }
 }

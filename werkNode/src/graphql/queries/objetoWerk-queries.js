@@ -123,7 +123,18 @@ const objetoWerkType = gql `
   type Query {
     Prueba: String
     qObjetWerkView(params_query: paramsQueryInput!): ObjetoWerkViewData
-    qObjectWerk(params_query: paramsQueryInput!): [IObjetoWerk]
+    qObjectWerkList(params_query: paramsQueryInput!): [IObjetoWerk]
+  }
+
+  type Mutation {
+    creandoObjetoWerk( Params: ParamsObjetoWerkInput! ): IObjetoWerk
+    actualizandoObjetoWerk( Params: ParamsObjetoWerkInput! ): IObjetoWerk
+    eliminandoObjetoWerk(id: String!): String
+    activarDesactivarObjetoWerk(Params: ParamsObjetoWerkInput!): String!
+    accionesPostulantes( Params: ParamsPostulantesInput!, accion: String!, idVacante: String ): String!
+    reportObjetoWerk( Params: paramsQueryInput!, Estado: EstadoInput! ): String!
+    likingObjetoWerk( Params: paramsQueryInput!, action: String! ): String!
+    favoringObjetoWerk( Params: paramsQueryInput!, action: String! ): String!
   }
 
   input paramsQueryInput {
@@ -131,13 +142,11 @@ const objetoWerkType = gql `
     tipo_objeto: String
   }
 
-  type Mutation {
-    creandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
-    actualizandoObjetoWerk( params: ParamsObjetoWerkInput! ): IObjetoWerk
-    eliminandoObjetoWerk(id: String!): String
-    activarDesactivarObjetoWerk(params: ParamsObjetoWerkInput!): String!
-    accionesPostulantes( params: ParamsPostulantesInput!, accion: String!, idVacante: String! ): String!
-    reportObjetoWerk(id: String!, razon: String!, descripcion: String ): String!
+  input EstadoInput {
+    tipo: Boolean,
+    razon: String,
+    descripcion: String,
+    hardBane: Boolean
   }
 
   input ParamsObjetoWerkInput {
@@ -146,7 +155,7 @@ const objetoWerkType = gql `
   }
 
   input ParamsPostulantesInput {
-    id: String,
+    idPerfil: String,
     nombres: input_nombre
   }
 

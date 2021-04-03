@@ -1,8 +1,8 @@
 import gql from 'graphql-tag';
 
 export const WERKOBJECT_NEW_MUTATE = gql  `
-  mutation creandoObjetoWerk( $params: ParamsObjetoWerkInput! ){
-    creandoObjetoWerk( params: $params ){
+  mutation creandoObjetoWerk( $Params: ParamsObjetoWerkInput! ){
+    creandoObjetoWerk( Params: $Params ){
       __typename
       id,
       descripcion,
@@ -91,8 +91,8 @@ export const WERKOBJECT_NEW_MUTATE = gql  `
 `;
 
 export const WERKOBJECT_UPDATE_MUTATE = gql `
-  mutation actualizandoObjetoWerk( $params: ParamsObjetoWerkInput! ){
-    actualizandoObjetoWerk( params: $params ){
+  mutation actualizandoObjetoWerk( $Params: ParamsObjetoWerkInput! ){
+    actualizandoObjetoWerk( Params: $Params ){
       __typename
       descripcion,
       categorizaciones{
@@ -179,13 +179,31 @@ export const WERKOBJECT_UPDATE_MUTATE = gql `
 `;
 
 export const WERKOBJECT_ESTATUS = gql `
-  mutation activarDesactivarObjetoWerk( $params: ParamsObjetoWerkInput! ){
-    activarDesactivarObjetoWerk( params: $params )
+  mutation activarDesactivarObjetoWerk( $Params: ParamsObjetoWerkInput! ){
+    activarDesactivarObjetoWerk( Params: $Params )
   }
 `;
 
 export const WERKOBJECT_POSTULANTES = gql `
-  mutation accionesPostulantes( $params: ParamsPostulantesInput!, $accion: String!, $idVacante: String! ){
-    accionesPostulantes( params: $params, accion: $accion, idVacante: $idVacante )
+  mutation accionesPostulantes( $Params: ParamsPostulantesInput!, $accion: String!, $idVacante: String ){
+    accionesPostulantes( Params: $Params, accion: $accion, idVacante: $idVacante )
+  }
+`;
+
+export const REPORT_ACTIONS = gql `
+  mutation reportObjetoWerk($Params: paramsQueryInput!, $EstadoInput: EstadoInput!){
+    reportObjetoWerk( Params: $Params, Estado: $EstadoInput)
+  }
+`;
+
+export const WERKOBJECT_LIKING_MUTATE = gql `
+  mutation likingObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
+    likingObjetoWerk( Params: $Params, action: $action )
+  }
+`;
+
+export const WERKOBJECT_FAVORING_MUTATE = gql `
+  mutation favoringObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
+    favoringObjetoWerk( Params: $Params, action: $action )
   }
 `;

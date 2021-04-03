@@ -27,11 +27,11 @@ const objetosWerkArraySchema = new Schema({
 
 const postulanteArraySchema = new Schema({
   _id: false,
+  idPerfil: { type: String },
   nombres: {
     nombres: { type: String },
     apellidos: { type: String }
-  },
-  id: { type: String }
+  }
 });
 
 let correoRegexp = /.+\@.+\..+/;
@@ -115,7 +115,7 @@ const objetoWerkSchema = new Schema({
     likes: { type: Number, default: 0 },
     vistas: { type: Number, default: 0 }
   },
-  postulantes: { type: [postulanteArraySchema], default: undefined },
+  postulantes: { type: [postulanteArraySchema] },
   schema_version: { type: Number }
 },
   { timestamps: true }

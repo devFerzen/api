@@ -257,10 +257,12 @@ const globalTypes = gql `
   }
 
   type  _postulantes {
+    idPerfil: String
     nombres: _nombre
   }
 
   input  input_postulantes {
+    idPerfil: String
     nombres: input_nombre
   }
 

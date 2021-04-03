@@ -22,7 +22,7 @@ import crearTokens from './utilities/auth';
 //Pediente añadir debugModed
 mongoose.connect(config.mongoUrl, {
     useNewUrlParser: true,
-    useCreateIndex: false,
+    useCreateIndex: true,
     useUnifiedTopology: true,
     useFindAndModify: false
   })

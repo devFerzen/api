@@ -145,20 +145,23 @@
     },
     data() {
       return{
-        
+
       }
     },
     mounted(){
       //this.estatusAction();
-      /*let userData = {
-        id: "pepitoId",
-        nombres: {
-          nombres: "Raton Ratoncillo",
-          apellidos: "Vuela Vuela"
+
+      /*let PostulantesData = {
+        "idPerfil": "pito3",
+        "nombres": {
+          "nombres": "JUAN PEREZ",
+          "apellidos": "GZZ GZZ"
         }
       };
+      let idVacante = "604bb3239e90751e70e8fb29";
+      let accion = "crear";
 
-      this.reclutadorAction(userData, 'eliminar', "600f9a07144b8d7534e6629b");*/
+      this.accionesPostulantes(PostulantesData, accion, idVacante);*/
     }
   }
 </script>

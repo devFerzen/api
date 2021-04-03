@@ -273,7 +273,7 @@
 
 <script>
 import { WERK_OBJECT_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
-import { WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+import {WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
 
 export default {
   props:{

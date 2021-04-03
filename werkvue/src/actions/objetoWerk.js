@@ -1,21 +1,20 @@
-//https://vueschool.io/articles/vuejs-tutorials/reusing-logic-in-vue-components/
-//Agregar en el libro de notas
-
-/*
-  Dicha exportación es únicamente usada para Componentes con consumo de información
-  de un << ObjetoWerk >>
+/**
+ * @file
+ * Mutaciones Objetos Werk..
+ *
+ * Dicha exportación es únicamente usada para Componentes
+ * con consumo de información de un << ObjetoWerk >>
 */
-import { WERKOBJECT_POSTULANTES, WERKOBJECT_ESTATUS } from '../graphql/mutations/objetoWerkMutations.js';
+import * as OBMutations from '../graphql/mutations/objetoWerkMutations.js';
 
-//Add return, realUpdateEstatus
 export default {
   methods: {
     async estatusAction(){
 
-      let params = {
+      let Params = {
         id: this.objetoWerk.id,
       };
-      params.input = {
+      Params.input = {
         objeto_werk: {
           estatus:{
             tipo: !this.objetoWerk.objeto_werk.estatus.tipo
@@ -24,28 +23,92 @@ export default {
       }
 
       const resultadoMutacion = await this.$apollo.mutate({
-          mutation: WERKOBJECT_ESTATUS,
+          mutation: OBMutations.WERKOBJECT_ESTATUS,
           variables: {
-            params
+            Params
           }
       });
 
     },
-    async reclutadorAction(userData, tipoAccion, id){
-      let params = userData;
-      let accion = tipoAccion;
-      let idVacante = id;
 
+    async accionesPostulantes(Params, accion, idVacante){
       const resultadoMutacion = await this.$apollo.mutate({
-        mutation: WERKOBJECT_POSTULANTES,
+        mutation: OBMutations.WERKOBJECT_POSTULANTES,
         variables: {
-          params,
-          accion,
-          idVacante
+          Params: Params,
+          accion: accion,
+          idVacante: idVacante
         }
       });
-      console.dir(resultadoMutacion);
+      console.dir(resultadoMutacion); //AFSS- Cambio: retornar todo el objeto
 
+      /*if(!resultadoMutacion.ok){
+        this.$apollo.mutate({
+            mutation: OBMutations.REPORT_ACTIONS,
+            variables: {
+              id,
+              estado
+            }
+          });
+        }*/
+        return resultadoMutacion.ok;
+      },
+
+    async reclutadorAction(id, estadoData){
+
+      const resultadoMutacion = await this.$apollo.mutate({
+        mutation: OBMutations.REPORT_ACTIONS,
+        variables: {
+          id: id,
+          estadoData: estadoData
+        }
+      });
+
+      /*if(!resultadoMutacion.ok){
+        this.$apollo.mutate({
+            mutation: OBMutations.REPORT_ACTIONS,
+            variables: {
+              id,
+              estado
+            }
+          });
+        }*/
+
+        return resultadoMutacion;
+      },
+
+    async objetoWerkLikeAction(Params, action){
+      let resultadoMutacion;
+      try {
+          resultadoMutacion = await this.$apollo.mutate({
+            mutation: OBMutations.WERKOBJECT_LIKING_MUTATE,
+            variables: {
+              Params: Params,
+              action: action
+            }
+          });
+          return resultadoMutacion.data.likingObjetoWerk
+      } catch (e) {
+        this.errorMutate = e.message;
+        throw new Error(e.message);
+      }
+    },
+
+    async objetoWerkFavoring(Params, action){
+      try {
+        const resultadoMutacion = await this.$apollo.mutate({
+          mutation: OBMutations.WERKOBJECT_FAVORING_MUTATE,
+          variables: {
+            Params: Params,
+            action: action
+          }
+        });
+        return resultadoMutacion;
+      } catch (e) {
+        this.errorMutate = e.message;
+        throw new Error(e.message);
+      }
     }
+
   }
 }

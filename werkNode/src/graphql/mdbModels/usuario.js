@@ -1,6 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const facturacionArraySchema = new Schema({
+  _id: false,
   nombre: { type: String },
   rfc: { type: String },
   calle: { type: String },
@@ -38,10 +39,12 @@ const usuarioSchema = new Schema({
     id: { type: String, default: undefined },
   },
   obj_werk_fav: [{
+    _id: false,
     id: { type: String },
     tipo: { type: String },
   }],
   obj_werk_like: [{
+    _id: false,
     id: { type: String },
     tipo: { type: String },
   }],

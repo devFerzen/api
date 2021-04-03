@@ -139,9 +139,9 @@ export default {
     return{
       defaultCarruselAnuncio: {
         "id_list": [
-        "600f9e1c015c570ab870f3f8","600f9ec8015c570ab870f3f9","600f9ef1015c570ab870f3fa",
-        "600f9f36015c570ab870f3fb","600f9f4f015c570ab870f3fc","600f9f8c015c570ab870f3fd",
-        "600f9f98015c570ab870f3fe","600f9fa4015c570ab870f3ff","600f9fa8015c570ab870f400"
+        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b",
+        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b",
+        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b"
       ],
         "tipo_objeto": "Anuncio"
       },
