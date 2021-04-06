@@ -1,5 +1,4 @@
 <template>
-
   <div id="app">
     <Header :activeUser="isLoggeado"/>
     <!-- ROUTER NAV
@@ -11,11 +10,92 @@
     -->
     <router-view/>
 
-    <inicio-sesion-modal/>
-    <registro-modal/>
+    <!-- AFSS - Pensar si es lo mejor tener todos los modales globales
+      que se usarán en toda la vida de la aplicación y hacerlo
+      consumo Lazy loading, es buena opción o como son las mejores
+      implementaciones
+     -->
+    <inicio-sesion-modal v-if="mISActive"/>
+    <registro-modal v-if="mRActive"/>
     <facturacion-modal/>
   </div>
 </template>
+
+<script>
+  /*Utilities*/
+  import Vue from 'vue';
+  import { mapActions } from 'vuex';
+  import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
+  import gql from "graphql-tag";
+
+  /*Componentes*/
+  import Header from './components/Tools/Header.vue';
+
+  /*Constantes*/
+  export const gql_user_data = gql `
+    query userActivo {
+        userActivo {
+          _id
+          sobreNombre
+          werker{
+            id
+          }
+        }
+     }
+   `;
+
+  Vue.use(BootstrapVue)
+  Vue.use(BootstrapVueIcons)
+
+  export default {
+    name: 'App',
+    components: {
+      Header,
+      InicioSesionModal: () => import('./components/modalesGlobales/InicioSesion.vue'),
+      RegistroModal: () => import('./components/modalesGlobales/RegistroPrincipal.vue')
+    },
+    data() {
+      return {
+      }
+    },
+    computed: {
+      isLoggeado(){
+        if (this.$store.state.Autenticacion.user) {
+          return this.$store.state.Autenticacion.user;
+        }
+          return 'Visitante';
+      },
+      isFreelancer(){
+        return this.$store.state.Autenticacion.user && this.$store.state.Autenticacion.user.werker.tipo == "Freelance";
+      },
+      isContratante(){
+        return this.$store.state.Autenticacion.user && this.$store.state.Autenticacion.user.werker.tipo == "Contratante";
+      },
+      mISActive(){
+        return this.$store.state.Models.mISActive;
+      },
+      mRActive(){
+        return this.$store.state.Models.mRActive;
+      }
+    },
+    methods: {
+      ...mapActions({
+        actUserStore: 'Autenticacion/actUserStore'
+      }),
+    },
+    async created(){
+     //Identify the user, and store it.
+     await this.$apollo.query({ query: gql_user_data })
+       .then(value => {
+         this.actUserStore(value.data.userActivo);
+       });
+    },
+    beforeMount() {
+
+    }
+  }
+</script>
+
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;800;900&display=swap');
   @font-face {
@@ -121,7 +201,7 @@
     border: 0 solid transparent!important;
     font-size: 19px!important;
     font-weight: 800!important;
-    margin-top:30px!important;
+    margin-top: 30px!important;
   }
 
   .werk-main-buttom:active {
@@ -130,69 +210,3 @@
   }
 
 </style>
-
-<script>
-/*Utilities*/
-import Vue from 'vue';
-import { mapActions } from 'vuex';
-import { BootstrapVue, BootstrapVueIcons } from 'bootstrap-vue';
-import gql from "graphql-tag";
-
-/*Componentes*/
-import Header from './components/Tools/Header.vue';
-
-export const gql_user_data = gql `
-  query userActivo {
-      userActivo {
-        _id
-        sobreNombre
-        werker{
-          id
-        }
-      }
-   }
- `;
-
-Vue.use(BootstrapVue)
-Vue.use(BootstrapVueIcons)
-//PENDIENTE - extraer las mutaciones de su carpeta origen mejor
-export default {
-  name: 'App',
-  components: {
-    Header,
-  },
-  data() {
-    return {
-    }
-  },
-  computed: {
-    isLoggeado(){
-      if (this.$store.state.Autenticacion.user) {
-        return this.$store.state.Autenticacion.user;
-      }
-        return 'Visitante';
-    },
-    isFreelancer(){
-      return this.$store.state.Autenticacion.user && this.$store.state.Autenticacion.user.werker.tipo == "Freelance";
-    },
-    isContratante(){
-      return this.$store.state.Autenticacion.user && this.$store.state.Autenticacion.user.werker.tipo == "Contratante";
-    }
-  },
-  methods: {
-    ...mapActions({
-      actUserStore: 'Autenticacion/actUserStore'
-    }),
-  },
-  async created(){
-    //Identify the user, and store it.
-   await this.$apollo.query({ query: gql_user_data })
-     .then(value => {
-       this.actUserStore(value.data.userActivo);
-     });
-  },
-  beforeMount() {
-
-  }
-}
-</script>

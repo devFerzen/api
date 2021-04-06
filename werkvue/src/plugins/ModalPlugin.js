@@ -1,5 +1,6 @@
-import InicioSesionModal from '../components/modalesGlobales/InicioSesion.vue';
-import RegistroModal from '../components/modalesGlobales/RegistroPrincipal.vue';
+/**
+ * @file Js a cargo de manejar los emits de modales con informacion
+ */
 import FacturacionModal from '../components/modalesGlobales/DatosFacturacion.vue';
 
 const ModalBus = {
@@ -7,12 +8,12 @@ const ModalBus = {
   install(Vue, options){
     this.EventBus = new Vue();
 
-    Vue.component('inicio-sesion-modal', InicioSesionModal);
-    Vue.component('facturacion-modal', FacturacionModal);
-    Vue.component('registro-modal', RegistroModal);
+    Vue.component('FacturacionModal', FacturacionModal);
 
     Vue.prototype.$GlobalModal = {
       modalIS(params){
+        console.log("params");
+        console.log(params);
         ModalBus.EventBus.$emit('modalIS', params)
       },
       modalDF(params){

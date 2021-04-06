@@ -15,6 +15,7 @@
       </b-form-group>
 
     </b-form><!--form-modal-->
+
     <div class="acciones-modal">
       <a href="#" class="a-password">Olvide mi contraseña</a>
       <ApolloMutation :mutation="loginGql" :variables="{
@@ -126,7 +127,7 @@
 
 <script>
 /*
-* No se hará un modal global dentro de VUEX porque no sabe
+* AFSS - No se hará un modal global dentro de VUEX porque no sabe
 * si cambiaremos a un state management de GRAPHQL
 */
 
@@ -180,8 +181,6 @@ export default {
     iniciandoSesionStore(val) {
         //Mandar al store los valores de inicio de sesion
         this.actUserStore(val.data.loginUsuario);
-        console.dir(val);
-        console.log(val.data.loginUsuario.werker.tipo);
         this.navigateToWerkerHomePage(val.data.loginUsuario.werker.tipo);
         this.ISHideModal();
     },

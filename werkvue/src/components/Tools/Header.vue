@@ -1,54 +1,54 @@
 <template>
-<div class="header" style="margin-bottom:20px;">
-  <b-navbar toggleable="xl" type="light" class="nav werk-header-shadow">
-    <b-navbar-brand :to="{name:'home-route'}" class="logo">werk..</b-navbar-brand>
+  <div class="header" style="margin-bottom:20px;">
+    <b-navbar toggleable="xl" type="light" class="nav werk-header-shadow">
+      <b-navbar-brand :to="{name:'home-route'}" class="logo">werk..</b-navbar-brand>
 
-    <!-- Searchbar -->
-    <b-nav-form id="searchbar">
-      <b-input-group>
-      	<template v-slot:append>
-      		<button type="button" class="btn btn-outline-secondary"><b-icon icon="Search"></b-icon></button>
-      	</template>
-      <b-form-input class="seam-r" placeholder="Buscar"></b-form-input>
-      </b-input-group>
-    </b-nav-form>
-    <!-- Searchbar -->
+      <!-- Searchbar -->
+      <b-nav-form id="searchbar">
+        <b-input-group>
+        	<template v-slot:append>
+        		<button type="button" class="btn btn-outline-secondary"><b-icon icon="Search"></b-icon></button>
+        	</template>
+        <b-form-input class="seam-r" placeholder="Buscar"></b-form-input>
+        </b-input-group>
+      </b-nav-form>
+      <!-- Searchbar -->
 
-    <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
-    <b-collapse id="nav-collapse" is-nav>
-      <b-navbar-nav v-if="this.activeUser === 'Visitante'">
-        <b-nav-item href="#">FREELANCER</b-nav-item>
-        <b-nav-item href="#">CONTRATANTE</b-nav-item>
-        <b-nav-item href="#">werkcoins..</b-nav-item>
-        <b-nav-item href="#">werk..packs</b-nav-item>
-        <b-nav-item href="#">SMART</b-nav-item>
-      </b-navbar-nav>
-      <b-navbar-nav v-else-if="this.activeUser ==! 'Visitante'">
-        <b-nav-item :to="{name:'werker-home-route'}">Home</b-nav-item>
-      </b-navbar-nav>
+      <b-collapse id="nav-collapse" is-nav>
+        <b-navbar-nav v-if="this.activeUser === 'Visitante'">
+          <b-nav-item href="#">FREELANCER</b-nav-item>
+          <b-nav-item href="#">CONTRATANTE</b-nav-item>
+          <b-nav-item href="#">werkcoins..</b-nav-item>
+          <b-nav-item href="#">werk..packs</b-nav-item>
+          <b-nav-item href="#">SMART</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav v-else-if="this.activeUser ==! 'Visitante'">
+          <b-nav-item :to="{name:'werker-home-route'}">Home</b-nav-item>
+        </b-navbar-nav>
 
-      <b-navbar-nav class="ml-auto" v-if="this.activeUser == 'Visitante'">
-        <b-nav-item @click="showISModal" class="buttonInicio">INICIAR SESIÓN</b-nav-item>
-        <b-nav-item @click="showRModal" class="buttonRegister">REGISTRARSE</b-nav-item>
-      </b-navbar-nav>
-      <b-navbar-nav class="ml-auto" v-else-if="this.activeUser ==! 'Visitante'">
-        <b-nav-item @click="showISModal">Hola, {{ shortName }}</b-nav-item>
-        <b-nav-item>
-          <b-img
-            :src="require('../../assets/werkCoins.png')"
-            center
-            height="28"
-          ></b-img>
-        </b-nav-item>
-        <b-nav-item>
-          <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
-        </b-nav-item>
-      </b-navbar-nav>
+        <b-navbar-nav class="ml-auto" v-if="this.activeUser == 'Visitante'">
+          <b-nav-item @click="showISModal" class="buttonInicio">INICIAR SESIÓN</b-nav-item>
+          <b-nav-item @click="showRModal" class="buttonRegister">REGISTRARSE</b-nav-item>
+        </b-navbar-nav>
+        <b-navbar-nav class="ml-auto" v-else-if="this.activeUser ==! 'Visitante'">
+          <b-nav-item @click="showISModal">Hola, {{ shortName }}</b-nav-item>
+          <b-nav-item>
+            <b-img
+              :src="require('../../assets/werkCoins.png')"
+              center
+              height="28"
+            ></b-img>
+          </b-nav-item>
+          <b-nav-item>
+            <font-awesome-icon :icon="['fas', 'ellipsis-v']" />
+          </b-nav-item>
+        </b-navbar-nav>
 
-    </b-collapse>
-  </b-navbar>
-</div>
+      </b-collapse>
+    </b-navbar>
+  </div>
 </template>
 
 <style>
@@ -154,6 +154,8 @@
 
 <script>
 
+import { mapActions } from 'vuex';
+
 export default {
   data() {
     return {
@@ -166,21 +168,36 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      mRActiveAction: 'Models/mRActiveAction',
+      mISActiveAction: 'Models/mISActiveAction'
+    }),
     showISModal() {
       // we must pass object params with all the information
       const params = {
-        title: "INICIAR SESIÓN",
-        text: "",
+        modalInerInfo : {
+          title: "INICIAR SESIÓN",
+          text: "",
+        },
+        isActive: true
       };
-      // now we can call function that will reveal our ISmodal prototype of our plugin
-      this.$GlobalModal.modalIS(params)
+
+      this.mISActiveAction(params);
+      /*AFSS - Hay mejor forma de saber cuando renderizo el Modal
+        para proceder a abrirlo.*/
+      setTimeout(() =>{
+        this.$GlobalModal.modalIS(params);
+      },100);
     },
     showRModal(){
       const params = {
         title: "ÚNETE A werk...",
       };
       // now we can call function that will reveal our ISmodal prototype of our plugin
-      this.$GlobalModal.modalRP(params)
+      this.mRActiveAction(true);
+      setTimeout(() =>{
+        this.$GlobalModal.modalRP(params);
+      },100);
     },
   }
 

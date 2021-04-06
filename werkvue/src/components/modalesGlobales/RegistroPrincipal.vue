@@ -1,4 +1,6 @@
-<template>
+{
+
+}<template>
   <div class="">
     <b-modal id="RegistroPrincipalModalID" centered hide-footer hide-header>
       <b-form>
