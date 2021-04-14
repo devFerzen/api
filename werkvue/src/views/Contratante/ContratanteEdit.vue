@@ -390,9 +390,10 @@
 <script>
 
 import { CONTRATANTE_INFO_QUERY } from '../../graphql/queries/contratanteQueries.js';
-import { CONTRATANTE_UPDATE_MUTATE } from '../../graphql/mutations/contratanteMutations.js';
+import { CONTRATANTE_UPDATE } from '../../graphql/mutations/contratanteMutations.js';
 
 export default {
+  name: 'contratanteWerk-edit-route',
   props: {
     id: {
       type: String,
@@ -537,7 +538,7 @@ export default {
       }
 
       const mutateAnswer = this.$apollo.mutate({
-        mutation: this.id === '0' ? CONTRATANTE_NEW_MUTATE : CONTRATANTE_UPDATE_MUTATE,
+        mutation: this.id === '0' ? CONTRATANTE_NEW : CONTRATANTE_UPDATE,
         variables: {
           params
         }
@@ -588,7 +589,7 @@ export default {
     height: 100%;
     background-repeat: no-repeat;
     z-index: 0;
-    background-image: url(../../components/Tools/Fondo.svg);
+    background-image: url(../../assets/Fondo.svg);
   }
 
   #contratante-edit .blue-circle-content {

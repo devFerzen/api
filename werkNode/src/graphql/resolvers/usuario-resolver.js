@@ -23,11 +23,34 @@ module.exports = {
 
       input.password = await bcrypt.hash(input.password, 10);
        try {
+
+         //console.log(">>>>>>creandoUsuario input ");
+         //console.dir(input);
+         if(input.werker.tipo == 'Freelance'){
+           const newFreelanceObject = await new werkModels.ObjetoWerk({
+             objeto_werk: {
+               tipo: 'Freelance',
+               estatus:{
+                 tipo: false
+               }
+             }
+           }).save();
+           console.log(">>>>>>newFreelanceObject");
+           console.dir(newFreelanceObject);
+           input.werker.id = newFreelanceObject._id;
+         }
+
          const nuevoUsuario = new werkModels.Usuario(input);
          await nuevoUsuario.save();
+
+         //console.log(">>>>>>nuevoUser");
+         //console.log("nuevoUsuario.werker.tipo ", nuevoUsuario.werker.tipo );
+
+
          return nuevoUsuario;
        } catch (e) {
          console.log(e);
+         throw new Error(e._message || e.message);
        }
 
     },
@@ -60,6 +83,8 @@ module.exports = {
 
      return userLogged;
    },
+
+   //AFSS - Ver si se quitará de aqui el remove de aqui
     async removeFavLike(_, { id, tipo, accion }, { werkModels }){
      let answer, updateValues;
      let userLogged = "5f83b94d7bae7855a4f16cc3";

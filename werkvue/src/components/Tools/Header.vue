@@ -17,23 +17,23 @@
       <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
       <b-collapse id="nav-collapse" is-nav>
-        <b-navbar-nav v-if="this.activeUser === 'Visitante'">
+        <b-navbar-nav v-show="this.activeUser === 'Visitante'">
           <b-nav-item href="#">FREELANCER</b-nav-item>
           <b-nav-item href="#">CONTRATANTE</b-nav-item>
           <b-nav-item href="#">werkcoins..</b-nav-item>
           <b-nav-item href="#">werk..packs</b-nav-item>
           <b-nav-item href="#">SMART</b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav v-else-if="this.activeUser ==! 'Visitante'">
+        <b-navbar-nav v-if="this.activeUser !== 'Visitante'">
           <b-nav-item :to="{name:'werker-home-route'}">Home</b-nav-item>
         </b-navbar-nav>
 
-        <b-navbar-nav class="ml-auto" v-if="this.activeUser == 'Visitante'">
+        <b-navbar-nav class="ml-auto" v-show="this.activeUser === 'Visitante'">
           <b-nav-item @click="showISModal" class="buttonInicio">INICIAR SESIÓN</b-nav-item>
           <b-nav-item @click="showRModal" class="buttonRegister">REGISTRARSE</b-nav-item>
         </b-navbar-nav>
-        <b-navbar-nav class="ml-auto" v-else-if="this.activeUser ==! 'Visitante'">
-          <b-nav-item @click="showISModal">Hola, {{ shortName }}</b-nav-item>
+        <b-navbar-nav class="ml-auto" v-if="this.activeUser !== 'Visitante'">
+          <b-nav-item>Hola, {{ shortName }}</b-nav-item>
           <b-nav-item>
             <b-img
               :src="require('../../assets/werkCoins.png')"
@@ -154,52 +154,50 @@
 
 <script>
 
-import { mapActions } from 'vuex';
+  import { mapActions } from 'vuex';
 
-export default {
-  data() {
-    return {
-    }
-  },
-  props: [ 'activeUser' ],
-  computed: {
-    shortName(){
-      return this.activeUser.sobreNombre || null;
-    }
-  },
-  methods: {
-    ...mapActions({
-      mRActiveAction: 'Models/mRActiveAction',
-      mISActiveAction: 'Models/mISActiveAction'
-    }),
-    showISModal() {
-      // we must pass object params with all the information
-      const params = {
-        modalInerInfo : {
-          title: "INICIAR SESIÓN",
-          text: "",
-        },
-        isActive: true
-      };
+  export default {
+    data() {
+      return {
+      }
+    },
+    props: [ 'activeUser' ],
+    computed: {
+      shortName(){
+        return this.activeUser.sobreNombre || null;
+      }
+    },
+    methods: {
+      ...mapActions({
+        mRActiveAction: 'Models/mRActiveAction',
+        mISActiveAction: 'Models/mISActiveAction'
+      }),
+      showISModal() {
+        const params = {
+          modalInerInfo : {
+            title: "INICIAR SESIÓN",
+            text: "",
+          },
+          isActive: true
+        };
 
-      this.mISActiveAction(params);
-      /*AFSS - Hay mejor forma de saber cuando renderizo el Modal
-        para proceder a abrirlo.*/
-      setTimeout(() =>{
-        this.$GlobalModal.modalIS(params);
-      },100);
-    },
-    showRModal(){
-      const params = {
-        title: "ÚNETE A werk...",
-      };
-      // now we can call function that will reveal our ISmodal prototype of our plugin
-      this.mRActiveAction(true);
-      setTimeout(() =>{
-        this.$GlobalModal.modalRP(params);
-      },100);
-    },
+        this.mISActiveAction(params);
+        /*AFSS - Hay mejor forma de saber cuando renderizo el Modal
+          para proceder a abrirlo.*/
+        setTimeout(() =>{
+          this.$GlobalModal.modalIS(params);
+        },100);
+      },
+      showRModal(){
+        const params = {
+          title: "ÚNETE A werk...",
+        };
+        this.mRActiveAction(true);
+        setTimeout(() =>{
+          this.$GlobalModal.modalRP(params);
+        },100);
+      },
+    }
+
   }
-
-}
 </script>

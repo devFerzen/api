@@ -37,7 +37,7 @@
 
       <div id="portafolio-images" class="float-lg-right mt-2 werk-shadow-card">
         <hooper :settings="insideHooperSettings">
-          
+
           <slide>
             <b-img-lazy block fluid class="object-images"
             src="https://th.bing.com/th/id/OIP.-sTUQ7Jb7KUpdQf4GcAftAHaFj?w=274&h=205&c=7&o=5&pid=1.7" />
@@ -176,7 +176,7 @@
   import 'hooper/dist/hooper.css';
 
   export default {
-    name: 'portafolioWerk-route',
+    name: 'portafolioWerk-edit-route',
     components: {
       likeStarShare,
       documentoCard,

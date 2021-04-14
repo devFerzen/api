@@ -273,9 +273,10 @@
 
 <script>
 import { WERK_OBJECT_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
-import {WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+import {WERKOBJECT_NEW, WERKOBJECT_UPDATE } from '../../graphql/mutations/objetoWerkMutations.js';
 
 export default {
+  name: 'vacanteWerk-edit-route',
   props:{
     id: {
       type: String,
@@ -362,7 +363,7 @@ export default {
       }
 
       const mutateAnswer = this.$apollo.mutate({
-        mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
+        mutation: this.id === '0' ? WERKOBJECT_NEW : WERKOBJECT_UPDATE,
         variable: {
           params
         }

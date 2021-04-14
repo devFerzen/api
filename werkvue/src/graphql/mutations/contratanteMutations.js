@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const CONTRATANTE_UPDATE_MUTATE = gql `
+export const CONTRATANTE_UPDATE = gql `
 
   mutation actualizandoPerfilContratante($params: ParamsContratanteInput!){
     actualizandoPerfilContratante(params: $params){
@@ -53,7 +53,7 @@ export const CONTRATANTE_UPDATE_MUTATE = gql `
 
 `;
 
-export const CONTRATANTE_NEW_MUTATE = gql `
+export const CONTRATANTE_NEW = gql `
 
   mutation creandoPerfilContratante($params: ParamsContratanteInput!){
     creandoPerfilContratante(params: $params){

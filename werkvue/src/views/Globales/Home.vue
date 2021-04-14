@@ -25,11 +25,11 @@
   import BigSearch from '../../components/Tools/BigSearch.vue'
   import CarruselesWerk from '../../components/Tools/CarruselesWerk.vue'
 
-  import ObjetoWerkActions from '../../actions/objetoWerk.js';
+  import OWMetodos from '../../actions/objetoWerk.js';
 
   export default {
-    mixins: [ObjetoWerkActions],
     name: 'home-route',
+    mixins: [OWMetodos],
     props: {
       needsLoginInicial: Boolean,
     },

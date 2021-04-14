@@ -21,7 +21,7 @@ const usuarioType = gql `
     categorizaciones_contratante: [_categorizacion]
     tags_contratante: [_tag]
     ip: String
-    estado: Int
+    estado: Boolean
   }
 
   type Query {

@@ -63,6 +63,15 @@ Vue.use(VueRouter)
     }
   },
   {
+    path: '/nuevoAnuncio',
+    name: 'anuncioWerk-new-route',
+    props: true,
+    component: () => import(/* webpackChunkName: "anuncioNew" */ '../views/Freelancer/AnuncioEdit.vue'),
+    meta: {
+      libre: true
+    }
+  },
+  {
     path: '/anuncio/:id/edit',
     name: 'anuncioWerk-edit-route',
     props: true,
@@ -89,7 +98,7 @@ Vue.use(VueRouter)
       libre: true
     }
   },
-  { //Falta
+  {
     path: '/contratante/:id/edit',
     name: 'contratanteWerk-edit-route',
     props: true,

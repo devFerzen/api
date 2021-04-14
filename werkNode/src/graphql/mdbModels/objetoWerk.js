@@ -21,7 +21,7 @@ const redesSocialesArraySchema = new Schema({
 
 const objetosWerkArraySchema = new Schema({
   _id: false,
-  tipo: { type: String, enum:['anuncio'] },
+  tipo: { type: String, enum:['Anuncio'] },
   id: { type: String }
 });
 
@@ -87,7 +87,7 @@ const objetoWerkSchema = new Schema({
     objetos_werk: { type: [objetosWerkArraySchema], default: undefined}
   },
   objeto_werk: {
-    tipo: { type: String, required: true, enum: ['vacante', 'freelance', 'anuncio'] },
+    tipo: { type: String, required: true, enum: ['Vacante', 'Freelance', 'Anuncio'] },
     // esquemas { 1 => 'Por proyecto (Única ocasión)', 2 => 'Por proyecto (Recurrente o ampliado)', 3 => 'Contrato Indefinido. - Honorarios' }
     esquemas: [{ type: Number, enum: [1, 2, 3] }],
     // capacidad { 1 => 'En oficinas de forma presencial ', 2 => 'Home Office - 100% Virtual', 3 => 'Flex (Home Office y Oficina)' }

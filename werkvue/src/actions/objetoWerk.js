@@ -5,7 +5,10 @@
  * Dicha exportación es únicamente usada para Componentes
  * con consumo de información de un << ObjetoWerk >>
 */
-import * as OBMutations from '../graphql/mutations/objetoWerkMutations.js';
+import * as OWMutations from '../graphql/mutations/objetoWerkMutations.js';
+
+//Quizás aquí estarán funciones privadas para rechazar likes, invitar a sub
+//cribir validaciones, etc...
 
 export default {
   methods: {
@@ -23,7 +26,7 @@ export default {
       }
 
       const resultadoMutacion = await this.$apollo.mutate({
-          mutation: OBMutations.WERKOBJECT_ESTATUS,
+          mutation: OWMutations.WERKOBJECT_ESTATUS,
           variables: {
             Params
           }
@@ -33,7 +36,7 @@ export default {
 
     async accionesPostulantes(Params, accion, idVacante){
       const resultadoMutacion = await this.$apollo.mutate({
-        mutation: OBMutations.WERKOBJECT_POSTULANTES,
+        mutation: OWMutations.WERKOBJECT_POSTULANTES,
         variables: {
           Params: Params,
           accion: accion,
@@ -44,7 +47,7 @@ export default {
 
       /*if(!resultadoMutacion.ok){
         this.$apollo.mutate({
-            mutation: OBMutations.REPORT_ACTIONS,
+            mutation: OWMutations.REPORT_ACTIONS,
             variables: {
               id,
               estado
@@ -57,7 +60,7 @@ export default {
     async reclutadorAction(id, estadoData){
 
       const resultadoMutacion = await this.$apollo.mutate({
-        mutation: OBMutations.REPORT_ACTIONS,
+        mutation: OWMutations.REPORT_ACTIONS,
         variables: {
           id: id,
           estadoData: estadoData
@@ -66,7 +69,7 @@ export default {
 
       /*if(!resultadoMutacion.ok){
         this.$apollo.mutate({
-            mutation: OBMutations.REPORT_ACTIONS,
+            mutation: OWMutations.REPORT_ACTIONS,
             variables: {
               id,
               estado
@@ -81,7 +84,7 @@ export default {
       let resultadoMutacion;
       try {
           resultadoMutacion = await this.$apollo.mutate({
-            mutation: OBMutations.WERKOBJECT_LIKING_MUTATE,
+            mutation: OWMutations.WERKOBJECT_LIKING,
             variables: {
               Params: Params,
               action: action
@@ -97,7 +100,7 @@ export default {
     async objetoWerkFavoring(Params, action){
       try {
         const resultadoMutacion = await this.$apollo.mutate({
-          mutation: OBMutations.WERKOBJECT_FAVORING_MUTATE,
+          mutation: OWMutations.WERKOBJECT_FAVORING,
           variables: {
             Params: Params,
             action: action
@@ -107,6 +110,20 @@ export default {
       } catch (e) {
         this.errorMutate = e.message;
         throw new Error(e.message);
+      }
+    },
+
+    async objetoWerkNewUpdate(Params, action){
+      try {
+        const resultadoMutacion = await this.$apollo.mutate({
+          mutation: action === '' ? OWMutations.WERKOBJECT_NEW : OWMutations.WERKOBJECT_NEW ,
+          variables: {
+            Params: Params
+          }
+        });
+        return creandoObjetoWerk;
+      } catch (e) {
+        throw new Error(e._message || e.message);
       }
     }
 

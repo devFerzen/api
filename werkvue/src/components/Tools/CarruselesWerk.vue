@@ -2,6 +2,11 @@
   <b-col class="p-0">
     <div id="werk-carousel">
       <hooper :settings="hooperSettings">
+        <slide v-if="werkUser">
+          <router-link :to="{ name: newRouteView }">
+            <button type="button" class="btn btn-outline-secondary">New {{paramsQuery.tipo_objeto}}</button>
+          </router-link>
+        </slide>
        <slide v-for="data in carruselData" :key="data._id">
          <werk-cards :werk-user="werkUser" :objeto-werk="data"></werk-cards>
        </slide>
@@ -56,66 +61,87 @@
 </style>
 
 <script>
-import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper';
-import 'hooper/dist/hooper.css';
+  import { Hooper, Slide, Navigation as HooperNavigation } from 'hooper';
+  import 'hooper/dist/hooper.css';
 
-import WerkCards from '@/components/Tools/WerkCards.vue';
+  import WerkCards from '@/components/Tools/WerkCards.vue';
+  import { WERK_OBJECT_LIST_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
+  import { WERKOBJECT_NEW } from '../../graphql/mutations/objetoWerkMutations.js';
 
-import gql from "graphql-tag"; // AFSS - validar si en realidad se usa con this.$apllo, según yo no...
-import { WERK_OBJECT_LIST_QUERY } from '../../graphql/queries/objetoWerkQueries.js';
-
-export default {
-  components: {
-    WerkCards,
-    Hooper,
-    Slide,
-    HooperNavigation
-  },
-  props: {
-    werkUser: Boolean,
-    paramsQuery: Object
-  },
-  data() {
-    return {
-      hooperSettings: {
-        pagination: "yes",
-        initialSlide: 0,
-        itemsToSlide: 1,
-        trimWhiteSpace: true,
-        wheelControl: false,
-        mouseDrag: true,
-        breakpoints: {
-          0: {
-            itemsToShow: 1
-          },
-          800: {
-            itemsToShow: 2,
-          },
-          993: {
-            itemsToShow: 3,
-          },
-          1200: {
-            itemsToShow: 4,
-          }
-        }
+  export default {
+    components: {
+      WerkCards,
+      Hooper,
+      Slide,
+      HooperNavigation
+    },
+    props: {
+      werkUser: {
+        type: Boolean,
+        default: false
       },
-      gqlQueryResult: '',
-      carruselData: [],
-    }
-
-  },
-
-  // AFSS - dependiendo del prop hacer la tarjeta (quizás una tarjeta universal)
-  // AFSS - falta después ver la manera de como pasar los filtros de búsqueda
-  async created () {
-    let params_query = this.paramsQuery;
-    console.dir(params_query);
-     this.gqlQueryResult = await this.$apollo.query({ query: WERK_OBJECT_LIST_QUERY,
-         variables: {
-           params_query
+      paramsQuery: Object
+    },
+    data() {
+      return {
+        hooperSettings: {
+          pagination: "yes",
+          initialSlide: 0,
+          itemsToSlide: 1,
+          trimWhiteSpace: true,
+          wheelControl: false,
+          mouseDrag: true,
+          breakpoints: {
+            0: {
+              itemsToShow: 1
+            },
+            800: {
+              itemsToShow: 2,
+            },
+            993: {
+              itemsToShow: 3,
+            },
+            1200: {
+              itemsToShow: 4,
+            }
+          }
+        },
+        gqlQueryResult: '',
+        carruselData: [],
+      }
+    },
+    computed: {
+      newRouteView(){
+        let ruta;
+        switch (this.paramsQuery.tipo_objeto) {
+          case 'Anuncio':
+            ruta = 'anuncioWerk-new-route';
+            break;
+          case 'Vacante':
+            ruta = 'vacanteWerk-new-route';
+            break;
+          case 'Portafolio':
+            ruta = 'portafolioWerk-new-route';
+            break;
+          default:
+            ruta = '';
         }
-      });
-     this.carruselData = this.gqlQueryResult.data.qObjectWerkList;
+        return ruta;
+      },
+    },
+
+    // AFSS - dependiendo del prop hacer la tarjeta (quizás una tarjeta universal)
+    // AFSS - falta después ver la manera de como pasar los filtros de búsqueda
+    async created () {
+      let params_query = this.paramsQuery;
+       this.gqlQueryResult = await this.$apollo.query({ query: WERK_OBJECT_LIST_QUERY,
+           variables: {
+             params_query
+          }
+        });
+      console.log("gqlQueryResultCarruselList");
+      console.dir(this.gqlQueryResult);
+       this.carruselData = this.gqlQueryResult.data.qObjectWerkList;
+    }
   }
-}
 </script>

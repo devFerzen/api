@@ -16,10 +16,9 @@ import {
 import jwt from 'jsonwebtoken';
 import crearTokens from './utilities/auth';
 
-//Investigar zeit/ms
+// AFSS Investigar zeit/ms
 
-
-//Pediente añadir debugModed
+// AFSS Pediente añadir debugModed
 mongoose.connect(config.mongoUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -101,12 +100,15 @@ app.use(async (req, res, next) => {
       authToken,
       refreshToken
     } = crearTokens(user);
+
     res.cookie('auth-token', authToken, {
       expire: 15 + Date.now()
     });
+
     res.cookie('refresh-token', refreshToken, {
       expire: 420000 + Date.now()
     });
+    
     next();
   }
 );

@@ -80,14 +80,14 @@
     },
     methods: {
       ...mapActions({
-        actUserStore: 'Autenticacion/actUserStore'
+        activeUserStore: 'Autenticacion/activeUserStore'
       }),
     },
     async created(){
      //Identify the user, and store it.
      await this.$apollo.query({ query: gql_user_data })
        .then(value => {
-         this.actUserStore(value.data.userActivo);
+         this.activeUserStore(value.data.userActivo);
        });
     },
     beforeMount() {

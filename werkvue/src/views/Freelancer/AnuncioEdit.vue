@@ -5,18 +5,24 @@
     <b-form @submit="onSubmit" @reset="onReset">
       <div class="titulo">
         <b-row no-gutters>
-          <b-col cols="7">
+          <b-col cols="6">
             <b-form-group
               id="inputGroupTitulo">
-              <b-form-input
+              <b-form-textarea
                 id="anuncioTitulo"
+                v-model="AnuncioInfo.titulo"
                 required
                 placeholder="TECLEA EL TÍTULO DE TU ANUNCIO..."
-                class="edit-inputs"
-              ></b-form-input>
+                style="border:none;"
+                rows=2
+                max-rows=2
+                no-resize=true
+                autocomplete=false
+                @keydown="maxCharTitle"
+              ></b-form-textarea>
             </b-form-group><!--titulo-->
           </b-col>
-          <b-col offset="3" cols="2">
+          <b-col offset="4" cols="2">
             <div class="delete-box">
               <font-awesome-icon :icon="['fab', 'twitter']" class="tw-redes-icons" />
             </div>
@@ -31,38 +37,27 @@
             id="inputGroupSobre"
             label="SOBRE TU ANUNCIO"
             label-for="anuncioSobre">
-            <b-form-input
+            <b-form-textarea
               id="anuncioSobre"
+              v-model="AnuncioInfo.descripcion"
               required
               placeholder="Teclea aquí"
-              class="edit-inputs"
-            ></b-form-input>
+              class="werk-input werk-shadow-input"
+              rows="2"
+              max-rows="6"
+              no-resize=true
+            ></b-form-textarea>
           </b-form-group><!--sobre-->
 
-          <b-form-group
-            id="inputGroupSobre"
-            label="SELECCIONA UNA CATEGORIA"
-            label-for="anuncioCategoria">
-            <b-form-input
-              id="anuncioCategoria"
-              required
-              placeholder="Teclea aquí"
-              class="edit-inputs">
-              </b-form-input>
-          </b-form-group><!--categorias-->
+          <autocomplete-input
+            labelFor="Categoria"
+            input-lable="SELECCIONA UNA CATEGORIA"
+            @evInputCat="getDataInputs"></autocomplete-input>
 
-          <b-form-group
-            id="inputGroupSobre"
-            label="SELECCIONA UNA SUBCATEGORIA"
-            label-for="anuncioSubCategoria">
-            <b-form-input
-              id="anuncioSubCategoria"
-              required
-              placeholder="Teclea aquí"
-              class="edit-inputs">
-              </b-form-input>
-          </b-form-group><!--subcategorias-->
-
+          <autocomplete-input
+            labelFor="SubCategoria"
+            input-lable="SELECCIONA UNA SUBCATEGORIA"
+            @evInputCat="getDataInputs"></autocomplete-input>
 
           <b-form-group
             id="inputGroupEspecialdiad"
@@ -81,14 +76,14 @@
                 <b-input-group>
                   <!-- Always bind the id to the input so that it can be focused when needed -->
                   <b-form-input
-                    v-model="inputAreaEspecialidad"
+                    v-model="_areas_de_especialidad"
                     :id="inputId"
                     :placeholder="placeholder"
                     :formatter="formatter"
-                    class="edit-inputs">
+                    class="werk-input werk-shadow-input">
                     </b-form-input>
                   <b-input-group-append>
-                    <b-button @click="addTag(inputAreaEspecialidad)" variant="primary">Add</b-button>
+                    <b-button @click="addTag(_areas_de_especialidad)" variant="primary">Add</b-button>
                   </b-input-group-append>
                 </b-input-group>
                 <b-form-invalid-feedback :state="state">
@@ -125,9 +120,10 @@
               label-for="anuncioAreaMinimo">
               <b-form-input
                 id="anuncioAreaMinimo"
+                v-model="AnuncioInfo.costo.min"
                 required
                 placeholder="Teclea aquí"
-                class="edit-inputs">
+                class="werk-input werk-shadow-input">
               </b-form-input>
             </b-form-group>
 
@@ -137,9 +133,10 @@
               label-for="anuncioAreaMaximo">
               <b-form-input
                 id="anuncioAreaMáximo"
+                v-model="AnuncioInfo.costo.max"
                 required
                 placeholder="Teclea aquí"
-                class="edit-inputs">
+                class="werk-input werk-shadow-input">
               </b-form-input>
             </b-form-group>
           </div>
@@ -153,8 +150,6 @@
 
         <div class="portafolios anuncio-edit-seccion">
           <h5 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">ACTIVA TUS PORTAFOLIOS</h5>
-          <PortafolioCard></PortafolioCard>
-          <PortafolioCard></PortafolioCard>
           <PortafolioCard></PortafolioCard>
         </div>
       </div>
@@ -191,13 +186,13 @@
           <b-row class="ml-0 mr-0">
             <b-col cols="12" class="pl-0 pr-0">
               <b-row class="ml-0">
-                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="phone-alt" class="tw-contactame-icons"/><span>818-181-8181</span></p>
+                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="phone-alt" class="tw-contactame-icons"/><span>{{AnuncioInfo.contacto.telefonos.fijo}}</span></p>
               </b-row>
               <b-row class="ml-0">
-                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="envelope" class="tw-contactame-icons"/><span>adrina@werkmexico.com</span></p>
+                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="envelope" class="tw-contactame-icons"/><span>{{AnuncioInfo.contacto.correo}}</span></p>
               </b-row>
               <b-row class="ml-0">
-                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="globe" class="tw-contactame-icons" style="transform: rotate(22deg);"/><span>www.portafolios.com.mx</span></p>
+                <p class="w-100 tw-contactame-titulo"><font-awesome-icon icon="globe" class="tw-contactame-icons" style="transform: rotate(22deg);"/><span>{{AnuncioInfo.contacto.url}}</span></p>
               </b-row>
               <b-row no-gutters align-h="start" class="tw-redes">
                 <b-col cols="2">
@@ -246,13 +241,16 @@
 </template>
 
 <script>
-  import PortafolioCard from '@/components/Freelancer/PortfolioSmallCard.vue'
+  import PortafolioCard from '@/components/Freelancer/PortfolioSmallCard.vue';
+  import AutocompleteInput from '@/components/Tools/AutocompleteInput.vue';
 
   import {WERK_OBJECT_QUERY} from '../../graphql/queries/objetoWerkQueries.js';
-  import {WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+  import OWMetodos from '../../actions/objetoWerk.js';
 
 
   export default {
+    name: 'anuncioWerk-new-route',
+    mixins: [OWMetodos],
     props: {
       id: {
         type: String,
@@ -261,13 +259,12 @@
     },
     components: {
       PortafolioCard,
+      AutocompleteInput
     },
     data() {
       return {
-        inputAreaEspecialidad: '',
-        inputSearchTag: '',
-        selectedSubCategoria: '',
-        selectedTag: '',
+        _areas_de_especialidad: '',
+        limitCharTitle: 30,
         AnuncioInfo: {
           titulo: '',
           costo: {
@@ -275,27 +272,20 @@
             max: 35000
           },
           areas_de_especialidad: ["Fotos de pie completo de Padre", "Fotos de talón de huerfanos", "Fotos de dedos raros de huerfanos"],
-          descripcion: "Soy fotografo de pies, Lorem ipsum dolor sit amet, te la comes Winnies lol consectetur adipiscing elit. Morbi aliquet molestie ligula in eleifend. PENE Nulla facilisi. Suspendisse potenti. Integer dictum ullamcorper enim sed suscipit. Vivamus iaculis lacus viverra velit suscipit rhoncus. Quisque quis nisi posuere, finibus mi non, malesuada est. Cras vehicula cursus malesuada. Suspendisse fringilla quis lectus a ornare.",
+          descripcion: "",
           categorizaciones: [
             {
-              tipo: "categoria",
+              tipo: "Categoria",
               nombre: "Marketing"
           	},
-          	{
-              tipo: "categoria",
-              nombre: "Fotografía"
-            },
-          	{
-              tipo: "sub-categoria",
+            {
+              tipo: "SubCategoria",
               nombre: "Publicidad"
-            }],
+            }
+          ],
           tags: [{
             nombre: "Pies",
             experiencia: 5
-          },
-          {
-            nombre: "Fotografía Nocturna Astral",
-            experiencia: 1
           }],
           contacto: {
             telefonos: {
@@ -305,15 +295,9 @@
             redes_sociales: [{
               red: "faWhatsapp",
               url: "url@urlwhatsapp"
-            },
-            {
-              red: "faTwitter",
-              url: "url@urltwitter"
-            },
-            {
-              red: "faLinkedin",
-              url: "url@urllinkedin"
-            }]
+            }],
+            url: "",
+            correo: ""
           },
           werker: {
             id: '6002706a8343ff508c0316d3',
@@ -354,12 +338,21 @@
     },
     computed: {
       availableCategorias() {
-        return this.options.categorias.filter( opt => this.value.indexOf(opt) === -1 );
+        //return this.options.categorias.filter( opt => this.value.indexOf(opt) === -1 );
       },
     },
     methods: {
+      maxCharTitle(event){
+        /*El evento keyDown se procesa antes que el navegador lo procese */
+        let keycode = event.keyCode;
+        if(this.AnuncioInfo.titulo.length > this.limitCharTitle){
+          if(keycode < 48 || keycode > 57){
+            event.preventDefault();
+          }
+        }
+      },
       resetInputValue() {
-          this.inputAreaEspecialidad = ''
+          this._areas_de_especialidad = ''
         },
       anuncioSaveUpdate(){
         let params = {};
@@ -369,12 +362,7 @@
           params.id = this.id;
         }
 
-        const mutateAnswer = this.$apollo.mutate({
-          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
-          variable: {
-            params
-          }
-        });
+        this.objetoWerkNewUpdate(params);
 
       },
       getAnuncioInfo: async(params) => {
@@ -390,12 +378,30 @@
         });
         console.dir(getQueryResult);
         this.AnuncioInfo = getQueryResult;
-      }
+      },
+
+      /**
+       * @function getDataInputs Extrae la informacion de los inputs autocompletes
+       */
+      getDataInputs(e){
+        let arr = this.AnuncioInfo.categorizaciones;
+
+        for (var loop = 0; loop < arr.length; loop++) {
+          if(arr[loop].tipo == e.inputFor){
+            this.AnuncioInfo.categorizaciones.[loop].tipo = e.inputFor;
+            this.AnuncioInfo.categorizaciones.[loop].nombre = e.value;
+            break;
+          }
+        }
+      },
+
     },
     async created(){
       let params = {};
       params.id = this.id;
-      await this.getAnuncioInfo(params);
+      console.log("params");
+      console.dir(params);
+      //await this.getAnuncioInfo(params);
     },
     beforeRouteLeave(to, from, next) {
       /*const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
@@ -430,8 +436,14 @@
     margin-left: -17px;
   }
 
-  .edit-inputs {
-    border-radius: 8px;
+  #anuncioTitulo {
+    font-size: 30px;
+    font-family: "MadeTommyExtraBold";
+    border: none;
+  }
+
+  #anuncioTitulo.form-control::-webkit-input-placeholder {
+    color: #C8C8C8;
   }
 
   .anuncio-edit-seccion {

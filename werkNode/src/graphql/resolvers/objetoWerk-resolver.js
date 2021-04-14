@@ -41,6 +41,7 @@ module.exports = {
       return 'Anuncio';
     }
   },
+
   Query: {
     Prueba: (_, args, { werkModels, activeUser }) => {
       console.log("el usuario esta loggeado con " + activeUser);
@@ -79,10 +80,10 @@ module.exports = {
      */
     async creandoObjetoWerk(_,{ Params }, { werkModels }){
       try {
-        const result = await new werkModels.ObjetoWerk(Params.input).save();
+        let result = await new werkModels.ObjetoWerk(Params.input).save();
 
         if(Params.input.objeto_werk.tipo === 'anuncio'){
-            await werkModels.ObjetoWerk.update(
+          await werkModels.ObjetoWerk.update(
               {_id: "600f9a07144b8d7534e6629b"},
               {
                 "$push": {
@@ -102,12 +103,14 @@ module.exports = {
               { _id: "6002706a8343ff508c0316d3" },
                 { "$push": { "vacantes": result.id } });
         }
+
         //console.dir(result);
         return result;
       } catch (e) {
         throw new Error(e);
       }
     },
+
     async eliminandoObjetoWerk(_, { id }, { werkModels }){
       let answer;
       //Validación de usuario
@@ -120,6 +123,7 @@ module.exports = {
       }
       return answer;
     },
+
     async actualizandoObjetoWerk(_, { Params }, { werkModels }){
 
       //Validacion deque si es el creador, o un agente de werk.
@@ -253,7 +257,7 @@ module.exports = {
     },
 
     /**
-     * @function creandoObjetoWerk
+     * @function creandoObjetoWerk Explicacion de lo que hace
      * @param {Params} Params Id y tipo del ObjetoWerk
      * @param {Object} Estado Estado de respuesta completo
      * @return {String} Respuesta del resolver Boolean
@@ -354,13 +358,13 @@ module.exports = {
      * @param {Object} Params Contiene el id del Objeto y su tipo
      * @param {Strgin} action La accion de agregarFavorito, quitarFavorito
      */
-    async favoringObjetoWerk(_, { Params, action }, { werkModels }){
+    async favoringObjetoWerk(_, { Params, action }, { werkModels } ){
       let queryAplicado = { _id: Params.id_list[0] };
       let dataToUpdate;
 
       switch (action) {
         case "agregarFavorito":
-          dataToUpdate= {
+          dataToUpdate = {
             "$inc": {
               "objeto_werk.favs": 1
             }
@@ -376,9 +380,11 @@ module.exports = {
         default:
 
       }
-      let idTest = "6002706a8343ff508c0316d3";
+
+      let idDelUsuario = "6002706a8343ff508c0316d3";
+
       const updateUser = await werkModels.Usuario.update(
-        { _id: idTest},
+        { _id: idDelUsuario},
         { "$addToSet": {
           "obj_werk_fav": {
             "id":Params.id_list[0],

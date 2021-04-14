@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 
-export const WERKOBJECT_NEW_MUTATE = gql  `
+export const WERKOBJECT_NEW = gql  `
   mutation creandoObjetoWerk( $Params: ParamsObjetoWerkInput! ){
     creandoObjetoWerk( Params: $Params ){
       __typename
@@ -90,7 +90,7 @@ export const WERKOBJECT_NEW_MUTATE = gql  `
 
 `;
 
-export const WERKOBJECT_UPDATE_MUTATE = gql `
+export const WERKOBJECT_UPDATE = gql `
   mutation actualizandoObjetoWerk( $Params: ParamsObjetoWerkInput! ){
     actualizandoObjetoWerk( Params: $Params ){
       __typename
@@ -196,13 +196,13 @@ export const REPORT_ACTIONS = gql `
   }
 `;
 
-export const WERKOBJECT_LIKING_MUTATE = gql `
+export const WERKOBJECT_LIKING = gql `
   mutation likingObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
     likingObjetoWerk( Params: $Params, action: $action )
   }
 `;
 
-export const WERKOBJECT_FAVORING_MUTATE = gql `
+export const WERKOBJECT_FAVORING = gql `
   mutation favoringObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
     favoringObjetoWerk( Params: $Params, action: $action )
   }

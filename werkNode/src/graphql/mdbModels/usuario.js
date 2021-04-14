@@ -35,7 +35,7 @@ const usuarioSchema = new Schema({
   password: { type: String, maxlength:1024, required:true },
   werker: {
     // tipo { 'freelance', 'contratante' }
-    tipo: { type: String, required: true, enum: ['freelance', 'contratante'] },
+    tipo: { type: String, required: true, enum: ['Freelance', 'Contratante'] },
     id: { type: String, default: undefined },
   },
   obj_werk_fav: [{

@@ -9,7 +9,7 @@ const getters = {
 };
 
 const actions = {
-    actUserStore({ commit }, nuevoUsuarioInfo){
+    activeUserStore({ commit }, nuevoUsuarioInfo){
       commit('INICIANDO_SESION', {input: nuevoUsuarioInfo});
     }
 

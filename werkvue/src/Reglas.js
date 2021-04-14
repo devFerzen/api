@@ -21,12 +21,15 @@ catch.????
 
 >>>Vue
 **Una sección de html con comportamientos u acciones, si es consumida en más de
-dos lugares dentro de la aplicación se le convierte en un componente Vue y si se
+dos lugares dentro de la aplicación se le convierte en un COMPONENTE Vue y si se
 ocupa se le parametriza.
 
-**El consumo de componentes y props deberán de estar siempre en la parte de arriba
+**El consumo de componentes y props deberán de estar siempre en la parte superior de data
 
 **Props esta bajo una nomenclatura de lowerCamelCase
+
+**Las variables para los v-model, deberán de tener la misma nomenclatura que la base de datos, cualquier
+otra variable será dada por una nomenclatura tipo _lowerCamelCase
 
 **Importación de componentes esta bajo una nomeclatura de upperCamelCase y su consumo
 dentro de HTML esta bajo kebab-case.

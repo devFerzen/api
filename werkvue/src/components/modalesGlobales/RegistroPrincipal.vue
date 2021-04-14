@@ -70,7 +70,7 @@
       <div class="acciones-modal">
         <p>Al unirte aceptas los <a href="#" class="a-password">términos y condiciones</a>, así como el
           <a href="#" class="a-password">aviso de privacidad</a> de <b>werk...</b></p>
-          <ApolloMutation :mutation="creandoUsuarioGql" :variables="{
+          <ApolloMutation :mutation="USUARIO_NEW_MUTATE" :variables="{
             input:{
               sobreNombre: usuarioRegistro.sobreNombre,
               correo: usuarioRegistro.correo,
@@ -80,7 +80,7 @@
               }
             }
           }"
-          @done="registroUserStore">
+          @done="registroMutateAction">
           <template slot-scope="{ mutate, loading, error }">
             <div v-if="loading">Loading...</div>
             <b-button :disabled="loading" pill class="werk-main-buttom shadow-none" @click="mutate();">FINALIZAR</b-button>
@@ -226,15 +226,13 @@
 </style>
 
 <script>
-/*
-* No se hará un modal global dentro de VUEX porque no sabe
-* si cambiaremos a un state management de GRAPHQL
-*/
 
 import ModalBus from '../../plugins/ModalPlugin.js';
 import { gql } from "apollo-boost";
 import { mapActions } from 'vuex';
 import router from '../../router';
+
+import { USUARIO_NEW } from '../../graphql/mutations/usuarioMutations.js';
 
 export default {
   data() {
@@ -244,44 +242,34 @@ export default {
       // adding callback function variable
       onRegistro: {},
       usuarioRegistro: {
-        correo: 'test@test.com',
+        correo: '',
         password: '123456789',
         repPassword: '123456789',
-        sobreNombre: 'test2',
+        sobreNombre: '',
         werker:{
           tipo: 'Freelance'
         }
       },
-      creandoUsuarioGql: gql `
-        mutation creandoUsuario($input: UsuarioInput!){
-          creandoUsuario(input: $input){
-            sobreNombre
-            correo
-            password
-            werker{
-              tipo
-            }
-          }
-        }
-      `,
-
+      USUARIO_NEW_MUTATE: USUARIO_NEW
     }
   },
   methods: {
     ...mapActions({
-      actUserStore: 'Autenticacion/actUserStore'
+      activeUserStore: 'Autenticacion/activeUserStore'
     }),
     navigateToWerkerHomePage(val){
       if(val == "Freelance" || val == "Contratante"){
         router.push({ name: "werker-home-route"});
       }
     },
-    registroUserStore(val) {
-      // we must check if this.onRegistro is function
-      this.actUserStore(val.data.creandoUsuario);
-      this.navigateToWerkerHomePage(val.data.creandoUsuario.werker.tipo);
+    registroMutateAction(val) {
+      console.log("val");
+      console.log(val);
+
       this.hideModalRP();
       this.hideModalRC();
+      this.activeUserStore(val.data.creandoUsuario);
+      this.navigateToWerkerHomePage(val.data.creandoUsuario.werker.tipo);
     },
     showModalRP(params) {
       // making modal visible

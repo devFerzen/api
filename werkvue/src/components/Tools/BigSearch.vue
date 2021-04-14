@@ -40,7 +40,7 @@ export default {
 	  left: 0;
 	  width: 100%;
 	  height: 100%;
-		background-image: url("Fondo.svg");
+		background-image: url("../../assets/Fondo.svg");
 		background-repeat: no-repeat;
 		z-index: 0;
 	}

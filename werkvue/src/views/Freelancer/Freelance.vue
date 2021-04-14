@@ -109,7 +109,7 @@ export default {
     height: 100%;
     background-repeat: no-repeat;
     z-index: 0;
-    background-image: url(../../components/Tools/Fondo.svg);
+    background-image: url(../../assets/Fondo.svg);
   }
 
   .blue-circle-content {

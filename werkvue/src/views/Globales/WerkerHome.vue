@@ -1,35 +1,21 @@
 <template>
   <div id="werker-home">
-    <div class="pending-list">
-      <b-button v-b-toggle.list class="btn-pending-list">Lista de pendientes</b-button>
-      <b-collapse id="list">
-        <b-card>
-          <p><strong>1.</strong>Falta diseño movil del header.</p>
-          <p><strong>2.</strong>En las tarjeta werker en general:</p>
-          <p>A) Se indica al componente tarjeta werk que imprima el diseño werker. </p>
-          <p>B) Los botones de acción de una tarjeta cambian al editar, compartir, eliminar. </p>
-          <p>C) El ícono de likes muestra el total de likes y se agrega las vistas y su total. </p>
-          <p>D) Mandar a indicar que agregue la tarjeta de añadir anuncio/portafolio/Vacante. </p>
-        </b-card>
-      </b-collapse>
-    </div>
-
     <div class="blue-circle-background">
       <b-container fluid="md" class="blue-circle-content">
         <b-row no-gutters>
         </b-row>
       </b-container>
     </div>
-    <div v-if="userIs == 'freelance'">
+    <div v-if="userIs == 'Freelance'">
       <b-container fluid="md" align="left" class="portafolio" style="margin-top:140px;">
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS ANUNCIOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
+          <carruseles-werk :werk-user="esUsuario" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS PORTAFOLIOS</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
-          <carruseles-werk :werk-user="false" :params-query="defaultCarruselAnuncio"></carruseles-werk>
+          <carruseles-werk :werk-user="true" :params-query="defaultCarruselAnuncio"></carruseles-werk>
         </b-row>
 
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">VACANTES DE ACUERDO A MI PERFIL</h1>
@@ -43,7 +29,7 @@
         </b-row>
       </b-container>
     </div>
-    <div v-else>
+    <div v-else-if="userIs == 'Contratante'">
       <b-container fluid="md" align="left" class="portafolio" style="margin-top:140px;">
         <h1 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">MIS VACANTES</h1>
         <b-row align-v="center" style="margin-bottom:57px; margin-bottom: 28px;">
@@ -91,7 +77,7 @@
     height: 100%;
     background-repeat: no-repeat;
     z-index: 0;
-    background-image: url(../../components/Tools/Fondo.svg);
+    background-image: url(../../assets/Fondo.svg);
   }
 
   #werker-home .blue-circle-content {
@@ -137,11 +123,12 @@ export default {
   },
   data() {
     return{
+      esUsuario: false,
       defaultCarruselAnuncio: {
         "id_list": [
-        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b",
-        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b",
-        "600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b","600f9a07144b8d7534e6629b"
+        "600f9ef1015c570ab870f3fa",
+        "600f9f36015c570ab870f3fb","600f9f4f015c570ab870f3fc","600f9f8c015c570ab870f3fd",
+        "600f9f98015c570ab870f3fe","600f9fa4015c570ab870f3ff","600f9fa8015c570ab870f400"
       ],
         "tipo_objeto": "Anuncio"
       },
@@ -149,6 +136,7 @@ export default {
   },
   computed: {
     userIs(){
+      this.esUsuario = true;
       return this.$store.state.Autenticacion.user.werker.tipo;
     }
   }

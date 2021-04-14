@@ -462,7 +462,7 @@
     height: 100%;
     background-repeat: no-repeat;
     z-index: 0;
-    background-image: url(../../components/Tools/Fondo.svg);
+    background-image: url(../../assets/Fondo.svg);
   }
 
   #freelance-edit .blue-circle-content {
@@ -579,7 +579,7 @@
 
 <script>
 
-  import { WERKOBJECT_NEW_MUTATE, WERKOBJECT_UPDATE_MUTATE } from '../../graphql/mutations/objetoWerkMutations.js';
+  import { WERKOBJECT_NEW, WERKOBJECT_UPDATE } from '../../graphql/mutations/objetoWerkMutations.js';
   //Falta el objetoqUERIES
 
   export default {
@@ -796,7 +796,7 @@
         }
 
         const answer = this.$apollo.mutate({
-          mutation: this.id === '0' ? WERKOBJECT_NEW_MUTATE : WERKOBJECT_UPDATE_MUTATE,
+          mutation: this.id === '0' ? WERKOBJECT_NEW : WERKOBJECT_UPDATE,
           variables: {
             params
           }

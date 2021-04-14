@@ -129,10 +129,10 @@
   import { Hooper, Slide, Navigation as HooperNavigation, Pagination as HooperPagination } from 'hooper'
   import 'hooper/dist/hooper.css';
 
-  import ObjetoWerkActions from '../../actions/objetoWerk.js';
+  import OWMetodos from '../../actions/objetoWerk.js';
 
   export default {
-    mixins: [ObjetoWerkActions],
+    mixins: [OWMetodos],
     components: {
       Hooper,
       Slide,

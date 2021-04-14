@@ -8,7 +8,7 @@ const portafolioSchema = new Schema({
   favs: { type: Number, default: 0 },
   likes: { type: Number, default: 0 },
   vistas: { type: Number, default: 0 }
-},
+  },
   { timestamps: true }
 );
 

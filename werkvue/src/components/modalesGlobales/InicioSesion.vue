@@ -18,7 +18,7 @@
 
     <div class="acciones-modal">
       <a href="#" class="a-password">Olvide mi contraseña</a>
-      <ApolloMutation :mutation="loginGql" :variables="{
+      <ApolloMutation :mutation="USUARIO_LOGIN_MUTATE" :variables="{
           correo: usuarioLogin.correo,
           password: usuarioLogin.password
         }"
@@ -136,41 +136,27 @@ import { gql } from "apollo-boost";
 import { mapActions } from 'vuex'
 import router from '../../router';
 
+import { USUARIO_LOGIN } from '../../graphql/mutations/usuarioMutations.js';
+
 export default {
   data() {
     return {
       title: '',
       text: '',
       // adding callback function variable
-      onIniciandoSesion: {},
       usuarioLogin: {
-        correo: 'meje@meje.com',
+        correo: 'aff15@aff15.com',
         password: '123456789'
       },
-      loginGql: gql `
-        mutation LOGIN_USUARIO(
-          $correo: String!
-          $password: String!
-        ){
-          loginUsuario(
-            correo: $correo
-            password: $password
-          ){
-            sobreNombre
-            werker{
-              tipo
-            }
-          }
-        }
-      `,
+      USUARIO_LOGIN_MUTATE: USUARIO_LOGIN
     }
   },
   methods: {
     ...mapActions({
-      actUserStore: 'Autenticacion/actUserStore'
+      activeUserStore: 'Autenticacion/activeUserStore'
     }),
     navigateToWerkerHomePage(val){
-      if(val == "freelance" || val == "contratante"){
+      if(val == "Freelance" || val == "Contratante"){
         router.push({ name: "werker-home-route"});
       }
     },
@@ -180,7 +166,7 @@ export default {
     },
     iniciandoSesionStore(val) {
         //Mandar al store los valores de inicio de sesion
-        this.actUserStore(val.data.loginUsuario);
+        this.activeUserStore(val.data.loginUsuario);
         this.navigateToWerkerHomePage(val.data.loginUsuario.werker.tipo);
         this.ISHideModal();
     },
