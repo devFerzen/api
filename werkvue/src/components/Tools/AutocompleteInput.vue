@@ -82,18 +82,13 @@
         }
       },
       onKeyUp(){
-        console.log("onKeyUp");
         if (this.visibleItemKey > 0) {
           this.visibleItemKey = this.visibleItemKey -1;
-          console.log(this.visibleItemKey);
         }
       },
       onKeyDown(){
-        console.log("onKeyDown");
-        console.log("onKeyDown");
         if (this.visibleItemKey < this.itemsFiltered.length) {
           this.visibleItemKey = this.visibleItemKey + 1;
-          console.log(this.visibleItemKey);
         }
       },
       onEnter(){

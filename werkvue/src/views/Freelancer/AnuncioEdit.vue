@@ -64,40 +64,38 @@
             label-for="anuncioAreaEspecialidad"
             label="ÁREA DE ESPECIALIDAD">
             <b-form-tags
-              v-model="value"
-              @input="resetInputValue()"
+              v-model="_areas_de_especialidad"
               tag-variant="success"
               class="mb-2 mt-2"
               :disabled="disabled"
               no-outer-focus
-              placeholder="Escribe tu área de especialidad!."
-            >
-              <template v-slot="{tags, inputId, placeholder, addTag, removeTag }">
+              placeholder="Escribe tu área de especialidad!.">
+              <template v-slot="{tags, placeholder, inputAttrs, inputHandlers, addTag, removeTag }">
                 <b-input-group>
                   <!-- Always bind the id to the input so that it can be focused when needed -->
                   <b-form-input
-                    v-model="_areas_de_especialidad"
-                    :id="inputId"
+                    v-model="_area_de_especialidad"
+                    v-bind="inputAttrs"
+                    v-on="inputHandlers"
                     :placeholder="placeholder"
                     :formatter="formatter"
                     class="werk-input werk-shadow-input">
                     </b-form-input>
                   <b-input-group-append>
-                    <b-button @click="addTag(_areas_de_especialidad)" variant="primary">Add</b-button>
+                    <b-button @click="addingTag({inputAttrs, addTag})" variant="primary">Add</b-button>
                   </b-input-group-append>
                 </b-input-group>
                 <b-form-invalid-feedback :state="state">
                   Duplicate tag value cannot be added again!
                 </b-form-invalid-feedback>
                 <ul v-if="tags.length > 0" class="mb-0">
-                  <li v-for="tag in tags" :key="tag" :title="`Tag: ${tag}`" class="mt-2">
+                  <li v-for="tag in tags" :key="tag" :title="`Werk..Tag: ${tag}`" class="mt-2">
                     <span  class="d-flex align-items-center">
                       <span class="mr-2">{{ tag }}</span>
                       <b-button
                         size="sm"
                         variant="outline-danger"
-                        @click="removeTag(tag)"
-                      >
+                        @click="removingTag({tag ,removeTag})">
                         remove tag
                       </b-button>
                     </span>
@@ -263,7 +261,8 @@
     },
     data() {
       return {
-        _areas_de_especialidad: '',
+        _area_de_especialidad: '',
+        _areas_de_especialidad: [],
         limitCharTitle: 30,
         AnuncioInfo: {
           titulo: '',
@@ -342,6 +341,9 @@
       },
     },
     methods: {
+      /**
+       * @function maxCharTitle Los Carácteres máximos que tendrá el título
+       */
       maxCharTitle(event){
         /*El evento keyDown se procesa antes que el navegador lo procese */
         let keycode = event.keyCode;
@@ -351,9 +353,7 @@
           }
         }
       },
-      resetInputValue() {
-          this._areas_de_especialidad = ''
-        },
+
       anuncioSaveUpdate(){
         let params = {};
         params.input = this.AnuncioInfo;
@@ -365,6 +365,7 @@
         this.objetoWerkNewUpdate(params);
 
       },
+
       getAnuncioInfo: async(params) => {
         if (params.id === '0') {
           return;
@@ -381,27 +382,53 @@
       },
 
       /**
-       * @function getDataInputs Extrae la informacion de los inputs autocompletes
+       * @function getDataInputs Extrae el valor de los inputs autocompletes hacia nuestro objeto
+       * @param {Object} autocompleteObjValues { inputFor: String, value: String }
        */
-      getDataInputs(e){
+      getDataInputs(autocompleteObjValues){
         let arr = this.AnuncioInfo.categorizaciones;
 
         for (var loop = 0; loop < arr.length; loop++) {
-          if(arr[loop].tipo == e.inputFor){
-            this.AnuncioInfo.categorizaciones.[loop].tipo = e.inputFor;
-            this.AnuncioInfo.categorizaciones.[loop].nombre = e.value;
+          if(arr[loop].tipo == autocompleteObjValues.inputFor){
+            this.AnuncioInfo.categorizaciones.[loop].tipo = autocompleteObjValues.inputFor;
+            this.AnuncioInfo.categorizaciones.[loop].nombre = autocompleteObjValues.value;
             break;
           }
         }
       },
 
+      /**
+       * @function addingTag Añadiendo tag hacía el objeto AnuncioInfo y limpia input
+       */
+       addingTag({inputAttrs, addTag}){
+         addTag(inputAttrs.value);
+         this._area_de_especialidad = '';
+         this.AnuncioInfo.areas_de_especialidad.push(inputAttrs.value);
+       },
+       
+       /**
+        * @function removingTag Añadiendo tag hacía el objeto AnuncioInfo y limpia input
+        */
+        removingTag({tag, removeTag}){
+          removeTag(tag);
+          const indexTag = this.AnuncioInfo.areas_de_especialidad.indexOf(tag);
+          if(indexTag > -1){
+            this.AnuncioInfo.areas_de_especialidad.splice(indexTag,1);
+          }
+        },
+
     },
     async created(){
+
+
       let params = {};
       params.id = this.id;
       console.log("params");
       console.dir(params);
       //await this.getAnuncioInfo(params);
+
+      /* Se da la limpia de la información del id dada */
+      this._areas_de_especialidad = this.AnuncioInfo.areas_de_especialidad;
     },
     beforeRouteLeave(to, from, next) {
       /*const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
