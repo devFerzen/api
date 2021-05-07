@@ -12,6 +12,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
   }
 
   type Freelance implements IObjetoWerk {
@@ -22,6 +23,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     informacion_personal: _informacion_personal
     areas_de_especialidad: [String]
@@ -37,6 +39,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     informacion_personal: _informacion_personal
     areas_de_especialidad: [String]
@@ -52,6 +55,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     titulo: String
     areas_de_especialidad: [String]
@@ -66,6 +70,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     titulo: String
     areas_de_especialidad: [String]
@@ -80,6 +85,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     titulo: String
     habilidades_req: [String]
@@ -95,6 +101,7 @@ const objetoWerkType = gql `
     werker: _werker
     contacto: _contacto
     objeto_werk: _objeto_werk
+    imagenes: [_imagenes]
 
     costo: _costo
     titulo: String
@@ -112,8 +119,6 @@ const objetoWerkType = gql `
     contacto: _contacto
     werker: _werker
     objeto_werk: _objeto_werk
-
-
   }
 
   type BannedResult {
@@ -122,8 +127,8 @@ const objetoWerkType = gql `
 
   type Query {
     Prueba: String
-    qObjetWerkView(params_query: paramsQueryInput!): ObjetoWerkViewData
-    qObjectWerkList(params_query: paramsQueryInput!): [IObjetoWerk]
+    qObjetWerkView(params_query: paramsInput!): ObjetoWerkViewData
+    qObjectWerkList(params_query: paramsInput!): [IObjetoWerk]
   }
 
   type Mutation {
@@ -132,12 +137,15 @@ const objetoWerkType = gql `
     eliminandoObjetoWerk(id: String!): String
     activarDesactivarObjetoWerk(Params: ParamsObjetoWerkInput!): String!
     accionesPostulantes( Params: ParamsPostulantesInput!, accion: String!, idVacante: String ): String!
-    reportObjetoWerk( Params: paramsQueryInput!, Estado: EstadoInput! ): String!
-    likingObjetoWerk( Params: paramsQueryInput!, action: String! ): String!
-    favoringObjetoWerk( Params: paramsQueryInput!, action: String! ): String!
+    reportObjetoWerk( Params: paramsInput!, Estado: EstadoInput! ): String!
+    likingObjetoWerk( Params: paramsInput!, action: String! ): String!
+    favoringObjetoWerk( Params: paramsInput!, action: String! ): String!
+    newImageObjetoWerk( ImagesParams: input_imagenes!, id: String! ): String!
+    updatePositionImagesObjetoWerk( id: String!, origin: Int!, target: Int!): String!
+    deletePositionImagesObjetoWerk( ImagesParams: input_imagenes!, id: String! ): String!
   }
 
-  input paramsQueryInput {
+  input paramsInput {
     id_list: [String],
     tipo_objeto: String
   }
@@ -177,7 +185,6 @@ const objetoWerkType = gql `
 
     informacion_personal: input_informacion_personal
     areas_de_especialidad: [String]
-
   }
 
 `;

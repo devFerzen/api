@@ -3,8 +3,11 @@
  */
 import bcrypt from 'bcryptjs';
 import crearTokens from '../../utilities/auth';
+import { UPLOAD_IMAGE_PATH } from '../../utilities/constants';
 import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
+import path from 'path';
+import fs from 'fs';
 
 //List updateValues
 const razonesCriticas = ["Fotos sexuales"];
@@ -50,11 +53,10 @@ module.exports = {
     },
     qObjetWerkView: (_, args, { werkModels }) => {
 
-      console.log("args");
-      console.log(args.params_query.id_list[0]);
-
+      console.log("args qObjetWerkView", args);
       const objectWerk = werkModels.ObjetoWerk.findById(args.params_query.id_list[0]);
       return objectWerk;
+
     },
     qObjectWerkList: (_, args, { werkModels }) => {
       const ids = args.params_query.id_list;
@@ -111,6 +113,10 @@ module.exports = {
       }
     },
 
+    /**
+     * @function eliminandoObjetoWerk
+     * @param {String} Id Informacion de la llamada.
+     */
     async eliminandoObjetoWerk(_, { id }, { werkModels }){
       let answer;
       //Validación de usuario
@@ -124,6 +130,10 @@ module.exports = {
       return answer;
     },
 
+    /**
+     * @function actualizandoObjetoWerk
+     * @param {Params} Params Informacion de la llamada.
+     */
     async actualizandoObjetoWerk(_, { Params }, { werkModels }){
 
       //Validacion deque si es el creador, o un agente de werk.
@@ -304,7 +314,7 @@ module.exports = {
     },
 
     /**
-     * @function likingObjetoWerk
+     * @function likingObjetoWerk Agrega y quita un Likes dentro de un objetoWerk
      *
      */
     async likingObjetoWerk(_, { Params, action }, { werkModels } ){
@@ -333,7 +343,7 @@ module.exports = {
       //Test activeUser passed by context
       let idTest = "6002706a8343ff508c0316d3";
 
-
+      //Falta el quitarlo con el dislike
       const updateUser = await werkModels.Usuario.updateOne(
         { _id: idTest},
         { "$addToSet": {
@@ -354,7 +364,7 @@ module.exports = {
     },
 
     /**
-     * @function favoringObjetoWerk
+     * @function favoringObjetoWerk Agrega y quita un Favoritos dentro de un objetoWerk
      * @param {Object} Params Contiene el id del Objeto y su tipo
      * @param {Strgin} action La accion de agregarFavorito, quitarFavorito
      */
@@ -400,7 +410,112 @@ module.exports = {
         );
       }
       return updateUser.ok;
-    }
+    },
+
+    /**
+     * @function newImageObjetoWerk Una nueva imagen dentro del objetoWerk
+     */
+     async newImageObjetoWerk(_, { ImagesParams, id }, { werkModels }){
+
+       try {
+         const updateUser = await werkModels.ObjetoWerk.update(
+           { _id: id },
+           { "$addToSet": {
+              "imagenes": {
+                "nombre_original": ImagesParams.nombre_original,
+                "nombre_werk": ImagesParams.nombre_werk,
+                "tamano": ImagesParams.tamano,
+                "extension": ImagesParams.extension,
+                "posicion": ImagesParams.posicion*1,
+                "path": 'uploads' + UPLOAD_IMAGE_PATH(ImagesParams.path)
+              }
+             }}
+         );
+         console.log("newImageObjetoWerk->updateUser:",updateUser);
+         return updateUser.ok;
+       } catch (e) {
+         console.dir(e);
+         throw new Error('Error al intentar guardar la imagen');
+       }
+
+     },
+
+     /**
+      * @function updatePositionImagesObjetoWerk Una nueva imagen dentro del objetoWerk
+      */
+     async updatePositionImagesObjetoWerk (_, { id, origin, target }, { werkModels }){
+        // extraer el arreglo de imagenes
+        const ObjetoImages = await werkModels.ObjetoWerk.findById(id);
+        let imagesArray = ObjetoImages.imagenes;
+        let baseDeComparacion = [origin, true];
+        if(target < origin){
+          baseDeComparacion = [target, false];
+        }
+
+        if(!ObjetoImages ) {
+          throw new Error ('Objeto no encontrado');
+        }
+
+        for (let i = 0; i < imagesArray.length; i++) {
+          if(origin == imagesArray[i].posicion){
+            imagesArray[i].posicion = target;
+            continue;
+          }
+          if(baseDeComparacion[0] <= imagesArray[i].posicion){
+            imagesArray[i].posicion = baseDeComparacion[1] ? imagesArray[i].posicion - 1 : imagesArray[i].posicion + 1;
+          }
+        }
+
+        console.log("nuevoArray", imagesArray);
+        //hacer el cambio en carga global porque extrajimos todas las images
+        //const resultadoMutacion = await werkModels.ObjetoWerk.update({});
+        return "yes";
+
+     },
+
+     /**
+      * @function deletePositionImagesObjetoWerk Eliminar imagen dentro del objetoWerk
+      */
+      async deletePositionImagesObjetoWerk (_, { ImagesParams, id }, { werkModels }){
+        console.log("deletePositionImagesObjetoWerk->ImagesParams:",ImagesParams);
+        console.log("deletePositionImagesObjetoWerk->id:",id);
+
+        let pathImagen = UPLOAD_IMAGE_PATH(ImagesParams.path);
+        console.log("deletePositionImagesObjetoWerk->pathImagen:",pathImagen);
+
+        const ObjetoImages = await werkModels.ObjetoWerk.findById(id); //No encuentra el objeto
+        console.log("deletePositionImagesObjetoWerk->ObjetoImages.images:");
+        console.dir( ObjetoImages.images);
+
+        const imagenes = ObjetoImages.images;
+        console.log("deletePositionImagesObjetoWerk->images:",images);
+
+        //Quitar de BD
+        const resultadoEliminacion = await werkModels.ObjetoWerk.update(
+          { _id: id },
+          { "$pull": {
+             "imagenes": {
+               "nombre_original": ImagesParams.nombre_original,
+             }
+            }}
+        )
+        console.log("deletePositionImagesObjetoWerk->resultadoEliminacion:",resultadoEliminacion);
+        //Confirmar el eliminado
+        if(resultadoEliminacion.ok === 1){
+
+          for (var i = 0; i < imagenes.length; i++) {
+            console.log("deletePositionImagesObjetoWerk->nombre_werk:",imagenes[i].nombre_werk);
+            console.log("deletePositionImagesObjetoWerk->nombre_original:",imagenes[i].nombre_original);
+            console.log("deletePositionImagesObjetoWerk->nombre_original[images]:",imagenes[i].nombre_original);
+          }
+          let reqPath = path.join(__dirname, '..', '..',pathImagen,imagenes[0].nombre_original);
+          console.log("deletePositionImagesObjetoWerk->reqPath:",reqPath);
+          fs.unlinkSync(reqPath);
+
+        }
+        return resultadoEliminacion.ok;
+      }
+
 
   }
 }

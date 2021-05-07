@@ -240,6 +240,24 @@ const globalTypes = gql `
     max: Int
   }
 
+  type _imagenes {
+    nombre_original: String,
+    nombre_werk: String,
+    tamano: String,
+    extension: String,
+    posicion: Int,
+    path: String
+  }
+
+  input input_imagenes {
+    nombre_original: String,
+    nombre_werk: String,
+    tamano: String,
+    extension: String,
+    posicion: Int,
+    path: String
+  }
+
   type _negocio {
     nombre: String
     descripcion: String

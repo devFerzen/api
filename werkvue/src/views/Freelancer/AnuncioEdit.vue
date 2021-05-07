@@ -64,7 +64,7 @@
             label-for="anuncioAreaEspecialidad"
             label="ÁREA DE ESPECIALIDAD">
             <b-form-tags
-              v-model="_areas_de_especialidad"
+              v-model="areas_de_especialidad"
               tag-variant="success"
               class="mb-2 mt-2"
               :disabled="disabled"
@@ -74,7 +74,7 @@
                 <b-input-group>
                   <!-- Always bind the id to the input so that it can be focused when needed -->
                   <b-form-input
-                    v-model="_area_de_especialidad"
+                    v-model="area_de_especialidad"
                     v-bind="inputAttrs"
                     v-on="inputHandlers"
                     :placeholder="placeholder"
@@ -144,6 +144,18 @@
       <div class="imagenesProyectos-portafolios float-lg-left">
         <div class="imagenes-proyectos anuncio-edit-seccion">
           <h5 align="left" style="font-weight:900; color:black; margin-bottom: 28px;">AÑADE TUS IMAGENES DE PROYECTOS</h5>
+            <file-pond
+              ref="refImages"
+              name="filePondImages"
+              label-idle="Añade tus imágenes de proyecto..."
+              itemInsertLocation="after"
+              :files="myFiles"
+              @init="handleFilePondInit"
+              @processfile="imagenesAnuncioOnProcess"
+              @removefile="imagenesAnuncioOnDelete"
+              @reorderfiles="imagenesAnuncioOnreorder"
+            />
+            <!-- :files="imagenesAnuncio"-->
         </div>
 
         <div class="portafolios anuncio-edit-seccion">
@@ -239,6 +251,54 @@
 </template>
 
 <script>
+  import vueFilePond, { setOptions } from 'vue-filepond'
+  import 'filepond/dist/filepond.min.css'
+  import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
+  import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+  import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+  import FilePondPluginFileMetadata from 'filepond-plugin-file-metadata'
+
+  // Create component
+  //AFSS - AGREGAR DESPUES: https://nielsboogaard.github.io/filepond-plugin-get-file/
+  const FilePond = vueFilePond(
+          FilePondPluginFileValidateType,
+          FilePondPluginImagePreview,
+          FilePondPluginFileMetadata
+  );
+  setOptions({
+    maxFiles: 6,
+    credits: false,
+    allowReorder: true,
+    allowMultiple: true,
+    imagePreviewMaxHeight: 256,
+    maxFileSize: '7MB',
+    itemInsertLocation: 'before',
+    labelFileLoading: 'Cargando',
+    labelFileLoadError: 'Error durante carga',
+    labelFileProcessing: 'Cargando',
+    labelFileProcessingComplete: 'Carga completada',
+    labelFileProcessingAborted: 'Carga cancelada',
+    labelFileProcessingError: 'Error durante carga',
+    labelTapToCancel: 'Tap para cancelar',
+    labelTapToRetry: 'Tap para reintentar',
+    labelTapToUndo: 'Tap para deshacer',
+    labelFileSizeNotAvailable: 'Tamaño no reconocido',
+    labelFileWaitingForSize: 'Verificando',
+    labelInvalidField: 'Archivo no valido',
+    server: {
+      url: 'http://localhost:3000/',
+      process: {
+        url: 'upload'
+      },
+      revert: "delete/",
+      load:'load/',
+      fetch:'load/'
+    },
+    fileMetadataObject: {
+        'objetotipo' : 'Anuncio'
+    }
+  });
+
   import PortafolioCard from '@/components/Freelancer/PortfolioSmallCard.vue';
   import AutocompleteInput from '@/components/Tools/AutocompleteInput.vue';
 
@@ -257,14 +317,26 @@
     },
     components: {
       PortafolioCard,
-      AutocompleteInput
+      AutocompleteInput,
+      FilePond
     },
     data() {
       return {
-        _area_de_especialidad: '',
-        _areas_de_especialidad: [],
+        myFiles: [{
+          //Source poner mi url...
+            source: "https://www.google.com/logos/doodles/2018/baba-amtes-104th-birthday-6729609885253632-s.png",
+            options:{
+                  type: 'remote'
+            }
+        }],
+        area_de_especialidad: '',
+        areas_de_especialidad: [],
         limitCharTitle: 30,
+        File: {},
+        imagenesAnuncio: [],
+
         AnuncioInfo: {
+          id: '',
           titulo: '',
           costo: {
             min: 25000,
@@ -339,8 +411,84 @@
       availableCategorias() {
         //return this.options.categorias.filter( opt => this.value.indexOf(opt) === -1 );
       },
+
     },
     methods: {
+
+      handleFilePondInit(){
+        console.log("handleFilePondInit");
+        console.log("getgile",this.$refs.refImages.getfile());
+        console.log("getgiles",this.$refs.refImages.getfiles());
+      },
+
+      /**
+       * @function imagenesAnuncioOnProcess Proceso para el guardado de imagenes
+       * @param {Object} error Objeto con información del error.
+       * @param {Object} file El file que se esta subiendo con información de la imagen.
+       */
+      imagenesAnuncioOnProcess(error, file) {
+        if(error) {
+          console.log("error onProcess",error);
+          console.log("file in error", file.file);
+          return;
+        }
+
+        let objetoImagen = {
+          nombre_original: file.filename,
+          nombre_werk: JSON.parse(file.serverId)[0],
+          tamano: file.fileSize + '',
+          extension: file.fileExtension,
+          posicion: this.imagenesAnuncio.length,
+          path: 'Anuncio'
+        };
+        console.log("ImageUploadOnProcess->objetoImagen:",objetoImagen);
+        this.imagenesAnuncio.push(objetoImagen);
+        this.objetoWerkImagesNew(objetoImagen, this.AnuncioInfo.id);
+      },
+
+      /**
+       * @function imagenesAnuncioOnreorder Es el número del lugar donde estaba el arreglo
+       * @param {Object} files Objeto producido por filepond
+       * @param {Int} origin El lugar donde se encontraba la imagen en el arreglo
+       * @param {Int} target El lugar ha donde se pasa dentro del arreglo
+       */
+      imagenesAnuncioOnreorder(files, origin, target) {
+
+        console.log("ImageOnReorder->{orgin,target}:",orgin,target);
+
+        /*
+        Preguntas:
+        Guardamos en automatico, o hacemos el update cuando le de save el usuario.
+        */
+        objetoWerkImagenesPositionUpdate(this.id, origin, target);
+
+      },
+
+      /**
+       * @function imagenesAnuncioOnDelete Los Carácteres máximos que tendrá el título
+       */
+      imagenesAnuncioOnDelete(error,file) {
+        console.log("ImageDelete->file:",file);
+        if(error) {
+          console.log("error onDelete",error);
+          console.log("file in error", file.file);
+          return;
+        }
+        let objetoImagen = {
+          nombre_original: file.filename,
+          nombre_werk: '',
+          tamano: file.fileSize + '',
+          extension: file.fileExtension,
+          posicion: file.origin, //extraer la posicion correcta en base a lo que hay en data.this.AnuncioInfo
+          path: 'Anuncio'
+        };
+
+        //Mandar a eliminar de la BD solamente.
+        console.log("ImageDelete->objetoImagen:",objetoImagen);
+        console.log("ImageDelete->AnuncioInfo.id:",this.AnuncioInfo.id);
+        this.objetoWerkImagesDelete(objetoImagen, this.AnuncioInfo.id);
+      },
+
       /**
        * @function maxCharTitle Los Carácteres máximos que tendrá el título
        */
@@ -354,6 +502,10 @@
         }
       },
 
+      /**
+       * @function anuncioSaveUpdate Guarda o actualiza un objeto Anuncio
+       * @param {Object} params {  }
+       */
       anuncioSaveUpdate(){
         let params = {};
         params.input = this.AnuncioInfo;
@@ -366,19 +518,29 @@
 
       },
 
+      /**
+       * @function getAnuncioInfo Extrae La información del objeto Anuncio
+       * @param {Object} params {  }
+       */
       getAnuncioInfo: async(params) => {
-        if (params.id === '0') {
+        if (params.id_list === '0') {
+          console.log("cancelling...");
           return;
         }
-
-        const getQueryResult = await this.$apollo.query({
-          query: WERK_OBJECT_QUERY,
-          variables: {
-            params
-          }
-        });
-        console.dir(getQueryResult);
-        this.AnuncioInfo = getQueryResult;
+        console.log("starting get");
+        try {
+          const getQueryResult = await this.$apollo.query({
+            query: WERK_OBJECT_QUERY,
+            variables: {
+              params_query: params
+            }
+          });
+          console.log("finish get");
+          console.log("getQueryResult", getQueryResult);
+          this.AnuncioInfo = getQueryResult;
+        } catch (e) {
+          throw new Error('Panico...');
+        }
       },
 
       /**
@@ -386,6 +548,7 @@
        * @param {Object} autocompleteObjValues { inputFor: String, value: String }
        */
       getDataInputs(autocompleteObjValues){
+        console.log("getDataInputs",autocompleteObjValues);
         let arr = this.AnuncioInfo.categorizaciones;
 
         for (var loop = 0; loop < arr.length; loop++) {
@@ -402,10 +565,10 @@
        */
        addingTag({inputAttrs, addTag}){
          addTag(inputAttrs.value);
-         this._area_de_especialidad = '';
+         this.area_de_especialidad = '';
          this.AnuncioInfo.areas_de_especialidad.push(inputAttrs.value);
        },
-       
+
        /**
         * @function removingTag Añadiendo tag hacía el objeto AnuncioInfo y limpia input
         */
@@ -422,13 +585,31 @@
 
 
       let params = {};
-      params.id = this.id;
-      console.log("params");
-      console.dir(params);
-      //await this.getAnuncioInfo(params);
+      params.id_list = ["600f9fa8015c570ab870f400"]; //this.id;
+      console.log("created->params:", params);
 
+      const getQueryResult = await this.$apollo.query({
+        query: WERK_OBJECT_QUERY,
+        variables: {
+          params_query: params
+        }
+      });
+      console.log("created->getQueryResult:", getQueryResult);
+      this.AnuncioInfo = getQueryResult.data.qObjetWerkView;
       /* Se da la limpia de la información del id dada */
-      this._areas_de_especialidad = this.AnuncioInfo.areas_de_especialidad;
+      this.areas_de_especialidad = this.AnuncioInfo.areas_de_especialidad;
+      this.imagenesAnuncio = this.AnuncioInfo.imagenes.map(function(imageInfo){
+          return { source: imageInfo.nombre_werk, options: { type: 'remote' }};
+      });
+
+      console.log("created->imagenesAnuncio:",this.imagenesAnuncio);
+      /*myFiles: [{
+          source: "https://www.google.com/logos/doodles/2018/baba-amtes-104th-birthday-6729609885253632-s.png",
+          options:{
+                type: 'remote'
+          }
+      }],*/
+
     },
     beforeRouteLeave(to, from, next) {
       /*const answer = window.confirm('Do you really want to leave? you have unsaved changes!')
@@ -669,4 +850,13 @@
     color: #379683;
     background-color: #5CD895;
   }
+
+  .filepond--root {
+    font-family: 'MadeTommyReg';
+  }
+
+  .filepond--file-action-button {
+    cursor: pointer;
+  }
+
 </style>

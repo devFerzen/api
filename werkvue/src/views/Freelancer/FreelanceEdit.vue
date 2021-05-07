@@ -774,7 +774,7 @@
         this.FreelanceInfo.tags.push({nombre: valor.werkTagNombre, exp: valor.werkTagExp});
       },
       getFreelanceinfo: async(params) => {
-        if (params.id === '0') {
+        if (params.id_list === '0') {
           return;
         }
 
@@ -817,7 +817,7 @@
       }
 
       let params = {};
-      parms.id = this.id;
+      parms.id_list = [this.id];
       await this.getFreelanceinfo(params);
     }
   }

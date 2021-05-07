@@ -191,19 +191,37 @@ export const WERKOBJECT_POSTULANTES = gql `
 `;
 
 export const REPORT_ACTIONS = gql `
-  mutation reportObjetoWerk($Params: paramsQueryInput!, $EstadoInput: EstadoInput!){
+  mutation reportObjetoWerk($Params: paramsInput!, $EstadoInput: EstadoInput!){
     reportObjetoWerk( Params: $Params, Estado: $EstadoInput)
   }
 `;
 
 export const WERKOBJECT_LIKING = gql `
-  mutation likingObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
+  mutation likingObjetoWerk( $Params: paramsInput!, $action: String! ){
     likingObjetoWerk( Params: $Params, action: $action )
   }
 `;
 
 export const WERKOBJECT_FAVORING = gql `
-  mutation favoringObjetoWerk( $Params: paramsQueryInput!, $action: String! ){
+  mutation favoringObjetoWerk( $Params: paramsInput!, $action: String! ){
     favoringObjetoWerk( Params: $Params, action: $action )
+  }
+`;
+
+export const WERKOBJECT_IMAGES_NEW = gql `
+  mutation newImageObjetoWerk( $ImagesParams: input_imagenes!, $id: String! ){
+    newImageObjetoWerk( ImagesParams: $ImagesParams, id: $id )
+  }
+`;
+
+export const WERKOBJECT_IMAGES_DELETE = gql `
+  mutation deletePositionImagesObjetoWerk( $ImagesParams: input_imagenes!, $id: String! ){
+    deletePositionImagesObjetoWerk( ImagesParams: $ImagesParams, id: $id )
+  }
+`;
+
+export const WERKOBJECT_IMAGES_UPDATEPOSITION = gql `
+  mutation updatePositionImagesObjetoWerk( $id: String!, $orign: Int!, $target: Int! ){
+    updatePositionImagesObjetoWerk( id: $id, origin: $origin, target: $target )
   }
 `;

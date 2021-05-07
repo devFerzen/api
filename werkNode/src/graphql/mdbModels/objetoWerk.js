@@ -34,6 +34,17 @@ const postulanteArraySchema = new Schema({
   }
 });
 
+const imagenesArraySchema = new Schema({
+  _id: false,
+  nombre_original: { type: String },
+  nombre_werk: { type: String },
+  tamano: { type: String },
+  extension: { type: String },
+  posicion: { type: Number },
+  path: { type: String },
+  fecha_alta: { type:Date, default: new Date() }
+});
+
 let correoRegexp = /.+\@.+\..+/;
 
 const objetoWerkSchema = new Schema({
@@ -62,6 +73,7 @@ const objetoWerkSchema = new Schema({
   categorizaciones: { type: [categoriasArraySchema], default: undefined},
   tags: { type: [tagsArraySchema], default: undefined},
   areas_de_especialidad: { type: [String], default: undefined },
+  imagenes: { type: [imagenesArraySchema], default: undefined },
   portafolios: { type: [Schema.Types.ObjectId], ref: 'portafolio', default: undefined},
   contacto: {
     telefonos: {

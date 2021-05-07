@@ -43,7 +43,7 @@ export default {
           idVacante: idVacante
         }
       });
-      console.dir(resultadoMutacion); //AFSS- Cambio: retornar todo el objeto
+      console.log("resultadoMutacion->AccionesPostulantes->",resultadoMutacion); //AFSS- Cambio: retornar todo el objeto??
 
       /*if(!resultadoMutacion.ok){
         this.$apollo.mutate({
@@ -90,6 +90,7 @@ export default {
               action: action
             }
           });
+          console.log("resultadoMutacion->OWLikeAction->",resultadoMutacion); //AFSS- Cambio: retornar todo el objeto??
           return resultadoMutacion.data.likingObjetoWerk
       } catch (e) {
         this.errorMutate = e.message;
@@ -106,6 +107,7 @@ export default {
             action: action
           }
         });
+        console.log("resultadoMutacion->OWFavoring->",resultadoMutacion); //AFSS- Cambio: retornar todo el objeto??
         return resultadoMutacion;
       } catch (e) {
         this.errorMutate = e.message;
@@ -116,16 +118,69 @@ export default {
     async objetoWerkNewUpdate(Params, action){
       try {
         const resultadoMutacion = await this.$apollo.mutate({
-          mutation: action === '' ? OWMutations.WERKOBJECT_NEW : OWMutations.WERKOBJECT_NEW ,
+          mutation: action === '' ? OWMutations.WERKOBJECT_NEW : OWMutations.WERKOBJECT_UPDATE ,
           variables: {
             Params: Params
           }
         });
-        return creandoObjetoWerk;
+        console.log("resultadoMutacion->OWNewUpdate->",resultadoMutacion); //AFSS- Cambio: retornar todo el objeto??
+        return resultadoMutacion;
       } catch (e) {
         throw new Error(e._message || e.message);
       }
-    }
+    },
 
+    async objetoWerkImagesNew(ImagesParams, objetoId){
+      try {
+        const resultadoMutacion = await this.$apollo.mutate({
+          mutation: OWMutations.WERKOBJECT_IMAGES_NEW,
+          variables: {
+            ImagesParams: ImagesParams,
+            id: objetoId
+          }
+        });
+        //AFSS - Aqui se pondrá las funcion de emitir el error o éxito?
+        console.log("ImageNew->resultadoMutacion: ",resultadoMutacion); //AFSS- Cambio: retornar todo el objeto??
+        return resultadoMutacion;
+      } catch (e) {
+        console.log("Error: objetoWerkImagesNew");
+        throw new Error(e._message || e.message);
+      }
+    },
+
+    async objetoWerkImagenesPositionUpdate( id, origin, target ){
+      try {
+        const resultadoMutacion = await this.$apollo.mutate({
+          mutation: OWMutations.WERKOBJECT_IMAGES_UPDATEPOSITION,
+          variables: {
+            id: id,
+            origin: origin,
+            target: target
+          }
+        });
+        console.log("resultadoMutacion->ImagenPositionUpdate->",resultadoMutacion);
+        return resultadoMutacion;
+      } catch (e) {
+        console.log("Error: objetoWerkImagenesPositionUpdate");
+        throw new Error(e._message || e.message);
+      }
+    },
+
+    async objetoWerkImagesDelete(ImagesParams, objetoId){
+      try {
+        const resultadoMutacion = await this.$apollo.mutate({
+          mutation: OWMutations.WERKOBJECT_IMAGES_DELETE,
+          variables: {
+            ImagesParams: ImagesParams,
+            id: objetoId
+          }
+        });
+        console.log("obwImageDelete->resultadoMutacion:",resultadoMutacion);
+        return resultadoMutacion;
+      } catch (e) {
+        console.log("obwImageDelete->error:");
+        throw new Error(e._message || e.message);
+      }
+    }
   }
 }

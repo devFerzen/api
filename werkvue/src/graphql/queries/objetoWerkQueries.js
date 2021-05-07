@@ -1,7 +1,7 @@
 import gql from "graphql-tag";
 
 export const WERK_OBJECT_QUERY = gql `
-  query qObjetWerkView($params_query: paramsQueryInput!){
+  query qObjetWerkView($params_query: paramsInput!){
     qObjetWerkView(params_query: $params_query){
 
       ... on FreelanceResult{
@@ -14,6 +14,14 @@ export const WERK_OBJECT_QUERY = gql `
         tags{
           nombre
           experiencia
+        }
+        imagenes {
+          nombre_original
+          nombre_werk
+          tamano
+          extension
+          posicion
+          path
         }
         contacto{
           telefonos{
@@ -84,6 +92,14 @@ export const WERK_OBJECT_QUERY = gql `
           nombre
           experiencia
         }
+        imagenes {
+          nombre_original
+          nombre_werk
+          tamano
+          extension
+          posicion
+          path
+        }
         contacto{
           telefonos{
             fijo
@@ -141,6 +157,14 @@ export const WERK_OBJECT_QUERY = gql `
         tags{
           nombre
           experiencia
+        }
+        imagenes {
+          nombre_original
+          nombre_werk
+          tamano
+          extension
+          posicion
+          path
         }
         contacto{
           telefonos{
@@ -208,7 +232,7 @@ export const WERK_OBJECT_QUERY = gql `
 `;
 
 export const WERK_OBJECT_LIST_QUERY = gql `
-  query qObjectWerkList($params_query: paramsQueryInput!){
+  query qObjectWerkList($params_query: paramsInput!){
     qObjectWerkList(params_query: $params_query){
       __typename
       id

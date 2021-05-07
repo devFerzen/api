@@ -26,9 +26,8 @@ import { HttpLink } from 'apollo-link-http';
 import { IntrospectionFragmentMatcher } from 'apollo-cache-inmemory';
 import introspectionQueryResultData from './fragmentTypes.json';
 
-import ModalPlugin from './plugins/ModalPlugin'
-
-Vue.use(ModalPlugin)
+import ModalPlugin from './plugins/ModalPlugin';
+Vue.use(ModalPlugin);
 
 Vue.use(BootstarpVue)
 Vue.config.productionTip = false
