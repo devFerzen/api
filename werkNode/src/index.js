@@ -6,7 +6,6 @@ import {
   graphqlHTTP
 } from 'express-graphql';
 import graphqlSchema from './graphql/schema';
-import config from './config';
 import mongoose from 'mongoose';
 import werkModels from './graphql/mdbModels'; //Modelos BD
 import cookieParser from "cookie-parser";
@@ -14,11 +13,19 @@ import * as WerkConstants from './utilities/constants';
 import jwt from 'jsonwebtoken';
 import crearTokens from './utilities/auth';
 import path from 'path';
+import dotenv from 'dotenv' // AFSS - no se logré hacer el pre-loader de env en scripts
 
 // AFSS Investigar zeit/ms
 
+if(process.env.NODE_ENV){
+  dotenv.config({ path: path.join(__dirname, '..', '.env.development'),});
+} else {
+  dotenv.config();
+}
+
 // AFSS Pediente añadir debugModed
-mongoose.connect(config.mongoUrl, {
+
+mongoose.connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -148,7 +155,7 @@ app.post('/upload', upload.array('filePondImages',12), (req, res, next) => {
     console.log("app.post/upload->req.files:",req.files);
     console.log("app.post/upload->req.body.objetoImagen:",req.body);
 
-    /*{
+    /*{ Object explain
     fieldname: 'filePondImages',
     originalname: 'fondo.jpg',
     encoding: '7bit',
@@ -201,6 +208,9 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP((req, res) =>({
   }))
 );
 
-app.listen(3000,() => {
-  console.log('Empezando servidor...');
+//Variables para Heroku
+const host = process.env.HOST || '0.0.0.0';
+const port = process.env.PORT || 3000;
+app.listen(port,host,() => {
+  console.log(`Empezando servidor en el process.env.PORT ${port}`);
 });
